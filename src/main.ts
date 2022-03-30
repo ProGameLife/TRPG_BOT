@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { Client, Intents, TextChannel } from "discord.js";
-import { create_room, send_main_guide, send_ability_guide, send_setup_guide} from "./guide"
+import { create_room, send_main_guide, send_ability_guide, send_setup_guide, send_manual_ability_guid} from "./guide"
 import { set_dice } from "./dice"
-import { set_auto_ability } from "./ability"
+import { check_manual_ability, clear_manual_ability, delete_ability, set_auto_ability, set_manual_ability } from "./ability"
 
 const client = new Client({
     intents: [
@@ -30,9 +30,15 @@ client.on('message',async (message) => {
 
     send_setup_guide(message);
     send_ability_guide(message);
+    send_manual_ability_guid(message, user_id);
+
+    clear_manual_ability(message, user_id);
+    check_manual_ability(message, user_id);
+    delete_ability(message, user_id);
     
     set_dice(message);
     set_auto_ability(message, user_id);
+    set_manual_ability(message, user_id);
 });
 
 client.on("interactionCreate", async (interaction) => {

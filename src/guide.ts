@@ -8,6 +8,8 @@ import {
     Client,
 } from "discord.js";
 import { MAIN_GUIDE, USER_ALL_GUIDE, MAKE_ABILITY_GUIDE, MAKE_ABILITY_MANUAL_GUIDE} from "./message/message_format";
+import { create_first_ability } from "./sql/insert";
+import { ability_stat } from "./utill/utill";
 
 export const send_main_guide =async (client: Client<boolean>) => {
     const channel = await client.channels.fetch('956028972645376060') as TextChannel;
@@ -36,8 +38,10 @@ export const send_setup_guide = async (message: Message<boolean>) => {
     message.channel.send(USER_ALL_GUIDE);
 };
 
-export const send_manual_ability_guid =async (message: Message<boolean>) => {
+export const send_manual_ability_guid = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!특성치 입력')) return;
+    ability_stat.start = true;
+    create_first_ability(user_id);
     message.channel.send(MAKE_ABILITY_MANUAL_GUIDE);
 }
 
