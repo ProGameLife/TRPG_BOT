@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { get_all_ability } from "./select";
-import { get_ability_status } from "../utill/utill"
+import { get_ability_status } from "../ability"
 
 const prisma = new PrismaClient();
 

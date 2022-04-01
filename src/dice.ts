@@ -17,7 +17,7 @@ export const set_dice = async (message: Message<boolean>) => {
     const extra_number = dice_command[0].substring(pos2, dice_command[0].length) === '' ? '0' : dice_command[0].substring(pos2, dice_command[0].length);
 
     const result_dice = roll_dice(Number(times), Number(dice_number), Number(extra_number), result_dice_number, 0);
-    await message.channel.send(dice_command[0] + ' 주사위 결과 : ' + result_dice.toString())
+    await message.reply(dice_command[0] + ' 주사위 결과 : ' + result_dice.toString())
 };
 
 export const roll_dice = (times: number, dice_number: number, extra_number: number, result_dice_number: number, mul_number: number) => {

@@ -44,6 +44,10 @@ export const get_all_ability = async (user_id: string) => {
             pow: true,
             edu: true,
             luk: true,
+            mov: true,
+            hp: true,
+            mp: true,
+            san: true,
         },
         where: { user_id: user_id },
     });

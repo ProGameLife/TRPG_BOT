@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 import { MAIN_GUIDE, USER_ALL_GUIDE, MAKE_ABILITY_GUIDE, MAKE_ABILITY_MANUAL_GUIDE} from "./message/message_format";
 import { create_first_ability } from "./sql/insert";
-import { ability_stat } from "./utill/utill";
+import { ability_stat } from "./ability";
 
 export const send_main_guide =async (client: Client<boolean>) => {
     const channel = await client.channels.fetch('956028972645376060') as TextChannel;
