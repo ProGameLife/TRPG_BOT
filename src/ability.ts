@@ -1,9 +1,8 @@
 import { Message } from "discord.js";
 import { upsert_ability } from "./sql/upsert";
-import { get_ability } from "./sql/select";
+import { get_ability, get_all_ability } from "./sql/select";
 import { update_one_ability } from "./sql/update";
 import { delete_user_ability } from "./sql/delete";
-import { get_all_ability } from "./sql/select";
 
 type atrr_ability = {
     dex: number;
@@ -109,7 +108,7 @@ export const clear_manual_ability = async (message: Message<boolean>, user_id: s
     await message.channel.send('특성치 입력이 끝났습니다.\n``!특성치 확인``을 입력하여 확인 하신 후 ``!가이드`` 명령어로 다음단계를 진행하시오');
 
     return;
-}
+};
 
 export const set_auto_ability = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!특성치 결정')) return;
@@ -120,7 +119,7 @@ export const set_auto_ability = async (message: Message<boolean>, user_id: strin
     message.channel.send('랜덤 특성치가 설정되었습니다. ``!특성치 확인`` 명령어로 확인 하시오');
     
     return;
-}
+};
 
 export const set_extra_ability = async (extra_ability: atrr_ability, user_id: string) => {
     const move = extra_ability.flatMap((element) => {
@@ -137,7 +136,7 @@ export const set_extra_ability = async (extra_ability: atrr_ability, user_id: st
     await upsert_ability(user_id, Number(move), hp[0], Math.floor(san[0] * 0.2), san[0]);
 
     return;
-}
+};
 
 export const delete_ability = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!특성치 삭제')) return;
@@ -145,7 +144,7 @@ export const delete_ability = async (message: Message<boolean>, user_id: string)
     message.channel.send('특성치를 삭제하였습니다.');
     
     return;
-}
+};
 
 export const get_ability_status = async (user_id: string) => {
     const user_all_ability = await get_all_ability(user_id);
