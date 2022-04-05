@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { roll_dice } from "../dice" 
+import { roll_dice } from "../dice";
 
 const prisma = new PrismaClient();
 
@@ -30,3 +30,21 @@ export const upsert_ability = async (user_id: string, move: number, hp_point: nu
         },
     });
 };
+
+export const upsert_uses_skill = async (user_id: string, skill_name: string, skill_stat: string, use_point: number) => {
+    await prisma.skill_uses.upsert({
+        select: { user_id: true },
+        where: { user_id: user_id },
+        create: {
+            user_id: user_id,
+            use_point: use_point,
+            skill_name: skill_name,
+            skill_stat: skill_stat,
+        },
+        update: {
+            use_point: use_point,
+            skill_name: skill_name,
+            skill_stat: skill_stat,
+        }
+    })
+}

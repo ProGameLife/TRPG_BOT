@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { get_all_ability } from "./select";
 import { get_ability_status } from "../ability"
+import { get_skill_point } from "./select";
 
 const prisma = new PrismaClient();
 
@@ -23,4 +23,15 @@ export const update_one_ability = async (user_id: string, ability: number, scope
             luk: value[8],
         },
     })
-}
+};
+
+export const update_skill_point = async (user_id: string, use_point: number ) => {
+    const temp_point = await get_skill_point(user_id);
+
+    await prisma.skill.update({
+        where: { user_id: user_id },
+        data: {
+            skill_point: temp_point - use_point,
+        }
+    })
+};

@@ -1,9 +1,7 @@
-import { 
-    ButtonInteraction, 
+import {
     MessageActionRow, 
     MessageButton, 
     TextChannel,
-    CacheType, 
     Message,
     Client,
 } from "discord.js";
@@ -14,8 +12,10 @@ import {
     MAKE_ABILITY_MANUAL_GUIDE,
     MAKE_SKILL_SET_GUIDE,
 } from "./message/message_format";
-import { create_first_ability } from "./sql/insert";
+import { create_first_ability, create_first_skill } from "./sql/insert";
 import { ability_stat } from "./ability";
+import { get_count_user_skill_list } from "./sql/select";
+import { make_skill_point } from "./skill";
 
 export const send_main_guide =async (client: Client<boolean>) => {
     const channel = await client.channels.fetch('956028972645376060') as TextChannel;
@@ -51,8 +51,9 @@ export const send_manual_ability_guide = async (message: Message<boolean>, user_
     message.channel.send(MAKE_ABILITY_MANUAL_GUIDE);
 };
 
-export const send_skill_guide = async (message: Message<boolean>) => {
-    if(!(message.content === '!직업')) return;
-    
+export const send_skill_guide = async (message: Message<boolean>, user_id: string) => {
+    if(!(message.content === '!스킬')) return;
+    if(await get_count_user_skill_list(user_id) === 0) await create_first_skill(user_id, await make_skill_point(user_id));
+
     message.channel.send(MAKE_SKILL_SET_GUIDE);
 };

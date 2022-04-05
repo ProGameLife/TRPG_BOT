@@ -1,6 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { PermissionOverwriteManager } from "discord.js";
-import { roll_dice } from "../dice" 
 
 const prisma = new PrismaClient();
 
@@ -16,7 +14,20 @@ export const get_ability = async (user_id: string) => {
         where: { user_id: user_id },
     });
     return get_ability;
-}
+};
+
+export const get_ability_idea = async (user_id: string) => {
+    const get_ability_idea = await prisma.ability.findMany({
+        select: {
+            idea: true,
+        },
+        where: { user_id: user_id },
+    });
+    const result = get_ability_idea.flatMap((element) => {
+        return element.idea;
+    })
+    return result[0];
+};
 
 export const get_manual_ability = async (user_id: string) => {
     const get_ability = await prisma.ability.findMany({
@@ -30,7 +41,7 @@ export const get_manual_ability = async (user_id: string) => {
         where: { user_id: user_id },
     });
     return get_ability;
-}
+};
 
 export const get_all_ability = async (user_id: string) => {
     const get_all_ability = await prisma.ability.findMany({
@@ -52,7 +63,7 @@ export const get_all_ability = async (user_id: string) => {
         where: { user_id: user_id },
     });
     return get_all_ability;
-}
+};
 
 export const get_skill_list = async (user_id: string) => {
     const get_all_skill_list = await prisma.skill.findMany({
@@ -101,6 +112,7 @@ export const get_skill_list = async (user_id: string) => {
             physics: true,
             pilot: true,
             aircraft_control: true,
+            math: true,
             ship_control: true,
             psychoanalysis: true,
             psychology: true,
@@ -124,11 +136,45 @@ export const get_skill_list = async (user_id: string) => {
         where: { user_id: user_id },
     })
     return get_all_skill_list;
-}
+};
 
-export const count_user_skill_list = async (user_id: string) => {
+export const get_count_user_skill_list = async (user_id: string) => {
     const count_user_skill = await prisma.skill.count({
         where: { user_id: user_id },
     })
     return count_user_skill;
+};
+
+export const get_skill_point = async (user_id: string) => {
+    const skill_point = await prisma.skill.findMany({
+        select: { skill_point: true },
+        where: { user_id: user_id},
+    })
+    const result = skill_point.flatMap((element) => {
+        return element.skill_point;
+    })
+
+    return result[0];
+};
+
+export const get_uses_skill_list = async (user_id: string) => {
+    const uses_skill_list = await prisma.skill_uses.findMany({
+        select: { 
+            use_point: true,
+            skill_name: true,
+            skill_stat: true,
+        },
+        where: {
+            user_id: user_id,
+        },
+    });
+   
+    return uses_skill_list;
 }
+
+export const get_count_uses_skill_list = async (user_id: string) => {
+    const count_uses_skill = await prisma.skill_uses.count({
+        where: { user_id: user_id },
+    })
+    return count_uses_skill;
+};

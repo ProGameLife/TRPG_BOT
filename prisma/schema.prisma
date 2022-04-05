@@ -89,4 +89,12 @@ model skill {
   kick                  Int    @default(25)
   observation           Int    @default(25)
   charm                 Int    @default(15)
+  math                  Int    @default(10)
+}
+
+model skill_uses {
+  user_id    String  @id @db.VarChar(64)
+  use_point  Int     @default(0)
+  skill_name String? @db.VarChar(128)
+  skill_stat String? @db.VarChar(128)
 }

@@ -13,7 +13,7 @@ import {
     check_manual_ability, 
     clear_manual_ability,
 } from "./ability";
-import { get_user_skill_list } from "./skill";
+import { add_user_skill_list, get_user_all_skill_list, show_user_skill_list } from "./skill";
 import { create_room } from "./utill/utill";
 import { Client, Intents, TextChannel } from "discord.js";
 import { set_dice } from "./dice";
@@ -42,23 +42,25 @@ client.on('message',async (message) => {
         message.delete();
         await message.channel.bulkDelete(100);
     }
-
-    send_setup_guide(message);
-    send_ability_guide(message);
-    send_manual_ability_guide(message, user_id);
-    send_skill_guide(message);
-
-    clear_manual_ability(message, user_id);
-    check_manual_ability(message, user_id);
-    delete_ability(message, user_id);
     
-    set_dice(message);
-    set_auto_ability(message, user_id);
-    set_manual_ability(message, user_id);
+    await send_setup_guide(message);
+    await send_ability_guide(message);
+    await send_manual_ability_guide(message, user_id);
+    await send_skill_guide(message, user_id);
 
-    view_user_sheet(message, user_id);
+    await clear_manual_ability(message, user_id);
+    await check_manual_ability(message, user_id);
+    await delete_ability(message, user_id);
+    
+    await set_dice(message);
+    await set_auto_ability(message, user_id);
+    await set_manual_ability(message, user_id);
 
-    get_user_skill_list(message, user_id)
+    await view_user_sheet(message, user_id);
+
+    await get_user_all_skill_list(message, user_id);
+    await add_user_skill_list(message, user_id);
+    await show_user_skill_list(message, user_id);
 });
 
 client.on("interactionCreate", async (interaction) => {
