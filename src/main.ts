@@ -13,7 +13,12 @@ import {
     check_manual_ability, 
     clear_manual_ability,
 } from "./ability";
-import { add_user_skill_list, get_user_all_skill_list, show_user_skill_list } from "./skill";
+import { 
+    clear_user_skill,
+    add_user_skill_list,
+    show_user_skill_list,
+    get_user_all_skill_list,
+} from "./skill";
 import { create_room } from "./utill/utill";
 import { Client, Intents, TextChannel } from "discord.js";
 import { set_dice } from "./dice";
@@ -48,6 +53,7 @@ client.on('message',async (message) => {
     await send_manual_ability_guide(message, user_id);
     await send_skill_guide(message, user_id);
 
+    await clear_user_skill(message, user_id);
     await clear_manual_ability(message, user_id);
     await check_manual_ability(message, user_id);
     await delete_ability(message, user_id);
@@ -66,7 +72,7 @@ client.on('message',async (message) => {
 client.on("interactionCreate", async (interaction) => {
     if (interaction.isButton()) { //버튼 눌렀을 때 이벤트
         const channel = await client.channels.fetch(interaction.channelId) as TextChannel;
-        create_room(interaction, channel, client);
+        await create_room(interaction, channel, client);
     }
 });
 

@@ -1,6 +1,16 @@
 import { Message } from "discord.js";
-import { get_skill_list, get_ability_idea, get_uses_skill_list, get_count_uses_skill_list } from "./sql/select";
-import { update_skill_point } from "./sql/update";
+import { 
+    get_skill_list, 
+    get_skill_point,
+    get_ability_idea, 
+    get_uses_skill_list, 
+    get_count_uses_skill_list, 
+} from "./sql/select";
+import { 
+    update_skill_point, 
+    update_use_skill_point, 
+    update_reset_uses_skill,
+} from "./sql/update";
 import { upsert_uses_skill } from "./sql/upsert";
 
 export const get_user_all_skill_list = async (message: Message<boolean>, user_id: string) => {
@@ -41,6 +51,13 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
     let skill_name = add_skill_command[1]; // 관찰력
     let skill_stat = Number(add_skill_command[2]); // 45 기존 스킬 값에 + 해서 입력해야함
     const temp_stat = skill_stat;
+
+    const skill_point = await get_skill_point(user_id);
+    if(skill_point < skill_stat){
+        message.channel.send('잔여 포인트가 부족합니다. ``!스킬목록`` 확인 후 진행해주시기 바랍니다.');
+        return;
+    }
+
     switch(true){
         case ['생물학', '컴퓨터', '전자공학', '지질학', '외국어', '물리학', '인류학', '천문학', '화학', '자물쇠다루기', '조종', '정신분석', '고고학', '변장', '무술'].includes(skill_name):
             skill_stat += 1;
@@ -73,9 +90,9 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
     }
     const skill_data = await make_uses_skill_data(user_id, skill_name, skill_stat, temp_stat);
 
-    update_skill_point(user_id, temp_stat); // 잔여스킬포인트 업데이트
-    upsert_uses_skill(user_id, skill_data.skill_name, skill_data.skill_stat, skill_data.use_point);
-
+    await update_use_skill_point(user_id, temp_stat); // 잔여스킬포인트 업데이트
+    await upsert_uses_skill(user_id, skill_data.skill_name, skill_data.skill_stat, skill_data.use_point);
+    await message.channel.send(skill_name + '( ' + skill_stat + '% ) 스킬이 추가 되었습니다.');
 };
 
 export const show_user_skill_list = async (message: Message<boolean> , user_id: string) => {
@@ -126,9 +143,41 @@ const make_uses_skill_data = async (user_id: string, skill_name: string, skill_s
     return result;
 }
 
+export const clear_user_skill = async (message: Message<boolean>, user_id: string) => {
+    if(!(message.content === '!스킬초기화')) return;
+
+    await update_skill_point(user_id, await make_skill_point(user_id));
+    await update_reset_uses_skill(user_id);
+    
+    await message.channel.send('스킬 초기화 되었습니다. 스킬을 다시 추가 해주세요.');
+};
+
 export const make_skill_point = async (user_id: string) => {
     const idea = await get_ability_idea(user_id) * 2;
     return idea;
+};
+
+export const view_uses_skill_list = async (user_id: string) => {
+    const uses_skill_list = await get_uses_skill_list(user_id);
+
+    const skill_name = uses_skill_list.flatMap((element) => {
+        return element.skill_name ?? '빈스킬';
+    });
+    const skill_stat = uses_skill_list.flatMap((element) => {
+        return element.skill_stat ?? '-'; 
+    });
+    
+    const uses_skill_name = skill_name[0].split(',');
+    const uses_skill_stat = skill_stat[0].split(',');
+
+    if(uses_skill_name[0] === '') uses_skill_name.shift();
+    if(uses_skill_stat[0] === '') uses_skill_stat.shift();
+
+    const result = {
+        uses_skill_name: uses_skill_name,
+        uses_skill_stat: uses_skill_stat,
+    };
+    return result;
 };
 
 export const make_user_skill_list = async (user_id: string) => {
@@ -253,7 +302,7 @@ export const make_user_skill_list = async (user_id: string) => {
     });
     const persuade = skill_list.flatMap((element) => { // 설득 222
         return element.persuade
-    })
+    });
     const photography = skill_list.flatMap((element) => { // 사진술
         return element.photography
     });
@@ -295,7 +344,7 @@ export const make_user_skill_list = async (user_id: string) => {
     });
     const math = skill_list.flatMap((element) => { // 수학 222
         return element.math
-    })
+    });
     const machine_gun = skill_list.flatMap((element) => { // 기관총사격
         return element.machine_gun
     });

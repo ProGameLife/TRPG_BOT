@@ -25,7 +25,7 @@ export const get_ability_idea = async (user_id: string) => {
     });
     const result = get_ability_idea.flatMap((element) => {
         return element.idea;
-    })
+    });
     return result[0];
 };
 
@@ -134,14 +134,14 @@ export const get_skill_list = async (user_id: string) => {
             charm: true,
         },
         where: { user_id: user_id },
-    })
+    });
     return get_all_skill_list;
 };
 
 export const get_count_user_skill_list = async (user_id: string) => {
     const count_user_skill = await prisma.skill.count({
         where: { user_id: user_id },
-    })
+    });
     return count_user_skill;
 };
 
@@ -149,10 +149,10 @@ export const get_skill_point = async (user_id: string) => {
     const skill_point = await prisma.skill.findMany({
         select: { skill_point: true },
         where: { user_id: user_id},
-    })
+    });
     const result = skill_point.flatMap((element) => {
         return element.skill_point;
-    })
+    });
 
     return result[0];
 };
@@ -168,13 +168,12 @@ export const get_uses_skill_list = async (user_id: string) => {
             user_id: user_id,
         },
     });
-   
     return uses_skill_list;
-}
+};
 
 export const get_count_uses_skill_list = async (user_id: string) => {
     const count_uses_skill = await prisma.skill_uses.count({
         where: { user_id: user_id },
-    })
+    });
     return count_uses_skill;
 };

@@ -29,6 +29,7 @@ export const upsert_ability = async (user_id: string, move: number, hp_point: nu
             san: 0,
         },
     });
+    return;
 };
 
 export const upsert_uses_skill = async (user_id: string, skill_name: string, skill_stat: string, use_point: number) => {
@@ -45,6 +46,7 @@ export const upsert_uses_skill = async (user_id: string, skill_name: string, ski
             use_point: use_point,
             skill_name: skill_name,
             skill_stat: skill_stat,
-        }
-    })
-}
+        },
+    });
+    return;
+};

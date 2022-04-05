@@ -1,10 +1,15 @@
 import { Message, MessageEmbed, } from "discord.js";
 import { get_ability_status } from "../ability";
+import { view_uses_skill_list } from "../skill";
 
 export const view_user_sheet = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!탐사자 시트')) return;
     const view_ability = await get_ability_status(user_id);
-
+    const view_skill = await view_uses_skill_list(user_id);
+    console.log(view_skill);
+    console.log(view_skill.uses_skill_name);
+    console.log(view_skill.uses_skill_stat);
+    
     const embed = new MessageEmbed()
         .setColor('#C171F5')
         .setTitle('👤 탐사자 시트')
@@ -36,21 +41,21 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
             { name: '🏃회피', value: String(Math.floor(view_ability[3] / 2)), inline: true },
             { name: '💀빈사(의식불명)', value: 'X', inline: true },
         )
-        .setTimestamp()
+
     const embed2 = new MessageEmbed()
         .setColor('#C171F5')
         .setTitle('🪄스킬목록')
         .addFields(
-            { name: '스킬1', value: '50' , inline: true },
-            { name: '스킬2', value: '20', inline: true },
-            { name: '스킬3', value: '40', inline: true },
-            { name: '스킬4', value: '50', inline: true },
-            { name: '스킬5', value: '60', inline: true },
-            { name: '스킬6', value: '70', inline: true },
-            { name: '스킬7', value: '20', inline: true },
-            { name: '스킬8', value: '40', inline: true },
+            { name: view_skill.uses_skill_name[0] ?? '빈스킬', value: view_skill.uses_skill_stat[0] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[1] ?? '빈스킬', value: view_skill.uses_skill_stat[1] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[2] ?? '빈스킬', value: view_skill.uses_skill_stat[2] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[3] ?? '빈스킬', value: view_skill.uses_skill_stat[3] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[4] ?? '빈스킬', value: view_skill.uses_skill_stat[4] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[5] ?? '빈스킬', value: view_skill.uses_skill_stat[5] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[6] ?? '빈스킬', value: view_skill.uses_skill_stat[6] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[7] ?? '빈스킬', value: view_skill.uses_skill_stat[7] ?? '-', inline: true },
         )
-        .setTimestamp()
+
     await message.channel.send({ embeds: [embed]});
     await message.channel.send({ embeds: [embed2]});
 }
