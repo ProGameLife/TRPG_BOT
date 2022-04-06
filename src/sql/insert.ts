@@ -22,3 +22,11 @@ export const create_first_skill = async (user_id: string, skill_point: number) =
     return;
 };
 
+export const create_first_user_status = async (user_id: string) => {
+    await prisma.user_status.create({
+        data: {
+            user_id: user_id,
+        },
+    });
+    return;
+}

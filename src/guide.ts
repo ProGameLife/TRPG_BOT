@@ -1,20 +1,22 @@
 import {
-    MessageActionRow, 
-    MessageButton, 
-    TextChannel,
-    Message,
     Client,
+    Message,
+    TextChannel,
+    MessageButton, 
+    MessageActionRow, 
 } from "discord.js";
 import { 
+    JOB_GUIDE,
     MAIN_GUIDE, 
     USER_ALL_GUIDE, 
     MAKE_ABILITY_GUIDE, 
-    MAKE_ABILITY_MANUAL_GUIDE,
     MAKE_SKILL_SET_GUIDE,
+    MAKE_ABILITY_MANUAL_GUIDE,
+    BACKSTORY_GUIDE,
 } from "./message/message_format";
-import { create_first_ability, create_first_skill } from "./sql/insert";
+import { create_first_ability, create_first_skill, create_first_user_status } from "./sql/insert";
 import { ability_stat } from "./ability";
-import { get_count_user_skill_list } from "./sql/select";
+import { get_count_user_skill_list, get_count_user_status } from "./sql/select";
 import { make_skill_point } from "./skill";
 
 export const send_main_guide =async (client: Client<boolean>) => {
@@ -52,8 +54,25 @@ export const send_manual_ability_guide = async (message: Message<boolean>, user_
 };
 
 export const send_skill_guide = async (message: Message<boolean>, user_id: string) => {
-    if(!(message.content === '!스킬')) return;
+    if(!(message.content === '!기능')) return;
     if(await get_count_user_skill_list(user_id) === 0) await create_first_skill(user_id, await make_skill_point(user_id));
 
     message.channel.send(MAKE_SKILL_SET_GUIDE);
 };
+
+export const send_job_guide = async (message: Message<boolean>, user_id: string) => {
+    if(!(message.content === '!직업')) return;
+    if(await get_count_user_status(user_id) === 0){
+        await create_first_user_status(user_id);
+    }
+    await message.channel.send(JOB_GUIDE);
+
+    return;
+};
+export const send_backstroy_guide = async (message: Message<boolean>) => {
+    if(!(message.content === '!백스토리')) return false;
+    await message.channel.send(BACKSTORY_GUIDE);
+    
+    return;
+};
+

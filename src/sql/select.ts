@@ -177,3 +177,24 @@ export const get_count_uses_skill_list = async (user_id: string) => {
     });
     return count_uses_skill;
 };
+
+export const get_count_user_status = async (user_id: string) => {
+    const count_user_status = await prisma.user_status.count({
+        where: { user_id: user_id },
+    });
+    return count_user_status;
+};
+
+export const get_user_status = async (user_id: string) => {
+    const user_status = await prisma.user_status.findMany({
+        select: {
+            p_name: true,
+            p_sex: true,
+            p_job: true,
+            p_age: true,
+            image_link: true,
+        },
+        where: { user_id: user_id },
+    });
+    return user_status;
+};

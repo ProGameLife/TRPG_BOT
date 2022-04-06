@@ -1,25 +1,25 @@
 import { Message, MessageEmbed, } from "discord.js";
 import { get_ability_status } from "../ability";
+import { view_user_status } from "../job";
 import { view_uses_skill_list } from "../skill";
 
 export const view_user_sheet = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!탐사자 시트')) return;
     const view_ability = await get_ability_status(user_id);
     const view_skill = await view_uses_skill_list(user_id);
-    console.log(view_skill);
-    console.log(view_skill.uses_skill_name);
-    console.log(view_skill.uses_skill_stat);
-    
+    const view_user = await view_user_status(user_id);
+    const number_of_stat = await exchange_stat(view_skill.uses_skill_stat);
+
     const embed = new MessageEmbed()
         .setColor('#C171F5')
         .setTitle('👤 탐사자 시트')
-        .setThumbnail('https://w.namu.la/s/f85dfbe4aa001782a18c7e92d9a28522e0378e2388db5f4ef453968aa066800ca7ddc42f349b8d9cf8e21d2036adf0c87e28ac1a78183b8f1af7c64fbc1d909d5a38edddb4354aa85c241076c650530ff17cca67730ffe51e30d63c215adad3e')
+        .setThumbnail(view_user.url ?? 'https://png.clipart.me/istock/previews/9349/93493545-people-icon.jpg')
         .addFields(
-            { name: '이름', value: '징버거' },
+            { name: '이름', value: view_user.name ?? '???'},
             { name: '플레이어', value: '<@' + user_id + '>' },
-            { name: '직업', value: '뭐시깽이', inline: true},
-            { name: '나이', value: '28', inline: true }, 
-            { name: '성별', value: '여자', inline: true},
+            { name: '직업', value: view_user.job ?? '??', inline: true},
+            { name: '나이', value: String(view_user.age) ?? '20', inline: true }, 
+            { name: '성별', value: view_user.sex ?? '??', inline: true},
             { name: 'ㅤ', value: '**🔧특성치**', inline: false},
             { name: '💪근력', value: String(view_ability[0]) + '/' +String(Math.floor(view_ability[0] / 2)) + '/' +String(view_ability[0] * 0.2), inline: true },
             { name: '🫀건강', value: String(view_ability[1]) + '/' +String(Math.floor(view_ability[1] / 2)) + '/' +String(view_ability[1] * 0.2), inline: true },
@@ -39,23 +39,32 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
             { name: 'ㅤ', value: '**🗡전투 특성치**', inline: false },
             { name: '👊피해 보너스', value: '없음', inline: true },
             { name: '🏃회피', value: String(Math.floor(view_ability[3] / 2)), inline: true },
-            { name: '💀빈사(의식불명)', value: 'X', inline: true },
+            { name: '💀빈사(의식불명)', value: '``X``', inline: true },
         )
 
     const embed2 = new MessageEmbed()
         .setColor('#C171F5')
-        .setTitle('🪄스킬목록')
+        .setTitle('🪄기능 목록')
         .addFields(
-            { name: view_skill.uses_skill_name[0] ?? '빈스킬', value: view_skill.uses_skill_stat[0] ?? '-', inline: true },
-            { name: view_skill.uses_skill_name[1] ?? '빈스킬', value: view_skill.uses_skill_stat[1] ?? '-', inline: true },
-            { name: view_skill.uses_skill_name[2] ?? '빈스킬', value: view_skill.uses_skill_stat[2] ?? '-', inline: true },
-            { name: view_skill.uses_skill_name[3] ?? '빈스킬', value: view_skill.uses_skill_stat[3] ?? '-', inline: true },
-            { name: view_skill.uses_skill_name[4] ?? '빈스킬', value: view_skill.uses_skill_stat[4] ?? '-', inline: true },
-            { name: view_skill.uses_skill_name[5] ?? '빈스킬', value: view_skill.uses_skill_stat[5] ?? '-', inline: true },
-            { name: view_skill.uses_skill_name[6] ?? '빈스킬', value: view_skill.uses_skill_stat[6] ?? '-', inline: true },
-            { name: view_skill.uses_skill_name[7] ?? '빈스킬', value: view_skill.uses_skill_stat[7] ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[0] ?? '빈스킬', value: view_skill.uses_skill_stat[0] + ' / ' + String(Math.floor(number_of_stat[0] / 2)) + ' / ' + String(number_of_stat[0] * 0.2) ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[1] ?? '빈스킬', value: view_skill.uses_skill_stat[1] + ' / ' + String(Math.floor(number_of_stat[1] / 2)) + ' / ' + String(number_of_stat[1] * 0.2) ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[2] ?? '빈스킬', value: view_skill.uses_skill_stat[2] + ' / ' + String(Math.floor(number_of_stat[2] / 2)) + ' / ' + String(number_of_stat[2] * 0.2) ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[3] ?? '빈스킬', value: view_skill.uses_skill_stat[3] + ' / ' + String(Math.floor(number_of_stat[3] / 2)) + ' / ' + String(number_of_stat[3] * 0.2) ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[4] ?? '빈스킬', value: view_skill.uses_skill_stat[4] + ' / ' + String(Math.floor(number_of_stat[4] / 2)) + ' / ' + String(number_of_stat[4] * 0.2) ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[5] ?? '빈스킬', value: view_skill.uses_skill_stat[5] + ' / ' + String(Math.floor(number_of_stat[5] / 2)) + ' / ' + String(number_of_stat[5] * 0.2) ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[6] ?? '빈스킬', value: view_skill.uses_skill_stat[6] + ' / ' + String(Math.floor(number_of_stat[6] / 2)) + ' / ' + String(number_of_stat[6] * 0.2) ?? '-', inline: true },
+            { name: view_skill.uses_skill_name[7] ?? '빈스킬', value: view_skill.uses_skill_stat[7] + ' / ' + String(Math.floor(number_of_stat[7] / 2)) + ' / ' + String(number_of_stat[7] * 0.2) ?? '-', inline: true },
         )
-
+    await message.channel.sendTyping();
     await message.channel.send({ embeds: [embed]});
     await message.channel.send({ embeds: [embed2]});
-}
+};
+
+export const exchange_stat = async(stat: String[]) => {
+    let number_stat: number[] = [];
+    stat.forEach((element) => {
+        number_stat.push(Number(element));
+    });
+
+    return number_stat;
+};

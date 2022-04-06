@@ -98,3 +98,13 @@ model skill_uses {
   skill_name String? @db.VarChar(128)
   skill_stat String? @db.VarChar(128)
 }
+
+model user_status {
+  user_id    String @id @db.VarChar(64)
+  p_name     String @default("") @db.VarChar(16)
+  p_age      Int    @default(0)
+  p_sex      String @default("") @db.VarChar(8)
+  p_job      String @default("") @db.VarChar(16)
+  image_link String @default("https://png.clipart.me/istock/previews/9349/93493545-people-icon.jpg") @db.VarChar(256)
+  back_story String @default("") @db.VarChar(256)
+}

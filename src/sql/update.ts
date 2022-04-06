@@ -59,3 +59,53 @@ export const update_reset_uses_skill = async (user_id: string) => {
     });
     return;
 };
+
+export const update_p_name = async (user_id: string, p_name: string) => { // 아름
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            p_name: p_name,
+        },
+    });
+    return;
+};
+
+export const update_p_age = async (user_id: string, p_age: number) => { // 나이
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            p_age: p_age,
+        },
+    });
+    return;
+};
+
+export const update_p_sex = async (user_id: string, p_sex: string) => { // 성별
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            p_sex: p_sex,
+        },
+    });
+    return;
+};
+
+export const update_p_job = async (user_id: string, p_job: string) => { // 직업
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            p_job: p_job,
+        },
+    });
+    return;
+};
+
+export const update_p_url = async (user_id: string, p_url: string) => { // 이미지
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            image_link: p_url,
+        },
+    });
+    return;
+};
