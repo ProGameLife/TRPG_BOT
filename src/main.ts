@@ -7,6 +7,7 @@ import {
     send_ability_guide, 
     send_manual_ability_guide,
     send_backstroy_guide,
+    send_equip_guide,
 } from "./guide";
 import { 
     delete_ability, 
@@ -34,6 +35,7 @@ import { Client, Intents, MessageActionRow, TextChannel } from "discord.js";
 import { set_dice } from "./dice";
 import { view_user_sheet } from "./view/view";
 import { make_backstory } from "./backstory";
+import { clear_equip, make_equip } from "./equip";
 
 const client = new Client({
     intents: [
@@ -64,7 +66,8 @@ client.on('message',async (message) => {
     await send_manual_ability_guide(message, user_id);
     await send_skill_guide(message, user_id);
     await send_job_guide(message, user_id);
-    await send_backstroy_guide(message, user_id);
+    await send_backstroy_guide(message);
+    await send_equip_guide(message);
 
     await clear_user_skill(message, user_id);
     await clear_manual_ability(message, user_id);
@@ -81,6 +84,8 @@ client.on('message',async (message) => {
     await add_user_skill_list(message, user_id);
     await show_user_skill_list(message, user_id);
 
+    await clear_equip(message, user_id);
+
     await set_p_name(message, user_id);
     await set_p_sex(message, user_id);
     await set_p_age(message, user_id);
@@ -88,6 +93,7 @@ client.on('message',async (message) => {
     await set_p_job(message, user_id);
     await end_job_command(message);
 
+    await make_equip(message, user_id);
     await make_backstory(message, user_id);
 }); 
 

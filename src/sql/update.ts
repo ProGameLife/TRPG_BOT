@@ -26,6 +26,24 @@ export const update_one_ability = async (user_id: string, ability: number, scope
     return;
 };
 
+export const update_user_equip = async (user_id: string, equip: string) => {
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            equip: equip,
+        },
+    });
+};
+
+export const update_clear_user_equip = async (user_id: string) => {
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            equip: '',
+        },
+    });
+};
+
 export const update_user_backstory = async (user_id: string, backstroy: string) => {
     await prisma.user_status.update({
         where: { user_id: user_id },

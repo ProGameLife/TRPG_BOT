@@ -153,7 +153,6 @@ export const get_skill_point = async (user_id: string) => {
     const result = skill_point.flatMap((element) => {
         return element.skill_point;
     });
-
     return result[0];
 };
 
@@ -203,7 +202,6 @@ export const get_count_backstory = async (user_id: string) => {
     const user_backstroty = await prisma.user_status.count({
         where: { user_id: user_id },
     });
-
     return user_backstroty;
 };
 
@@ -213,4 +211,19 @@ export const get_backstory = async (user_id: string) => {
         where: { user_id: user_id },
     });
     return backstory;
+};
+
+export const get_equip = async (user_id: string) => {
+    const equip = await prisma.user_status.findMany({
+        select: { equip: true },
+        where: { user_id: user_id },
+    });
+    return equip;
+};
+
+export const get_count_equip = async (user_id: string) => {
+    const user_backstroty = await prisma.user_status.count({
+        where: { user_id: user_id },
+    });
+    return user_backstroty;
 };

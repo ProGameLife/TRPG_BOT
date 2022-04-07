@@ -13,6 +13,7 @@ import {
     MAKE_SKILL_SET_GUIDE,
     MAKE_ABILITY_MANUAL_GUIDE,
     BACKSTORY_GUIDE,
+    EQUIP_GUIDE,
 } from "./message/message_format";
 import { create_first_ability, create_first_skill, create_first_user_status } from "./sql/insert";
 import { ability_stat } from "./ability";
@@ -70,10 +71,18 @@ export const send_job_guide = async (message: Message<boolean>, user_id: string)
     return;
 };
 
-export const send_backstroy_guide = async (message: Message<boolean>, user_id: string) => {
+export const send_backstroy_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!백스토리')) return;
 
     await message.channel.send(BACKSTORY_GUIDE);
+
+    return;
+};
+
+export const send_equip_guide = async (message: Message<boolean>) => {
+    if(!(message.content === '!장비')) return;
+
+    await message.channel.send(EQUIP_GUIDE);
 
     return;
 };
