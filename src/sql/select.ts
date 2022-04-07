@@ -198,3 +198,19 @@ export const get_user_status = async (user_id: string) => {
     });
     return user_status;
 };
+
+export const get_count_backstory = async (user_id: string) => {
+    const user_backstroty = await prisma.user_status.count({
+        where: { user_id: user_id },
+    });
+
+    return user_backstroty;
+};
+
+export const get_backstory = async (user_id: string) => {
+    const backstory = await prisma.user_status.findMany({
+        select: { back_story: true },
+        where: { user_id: user_id },
+    });
+    return backstory;
+};

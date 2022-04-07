@@ -2,13 +2,16 @@ import { Message, MessageEmbed, } from "discord.js";
 import { get_ability_status } from "../ability";
 import { view_user_status } from "../job";
 import { view_uses_skill_list } from "../skill";
+import { view_backstory } from "../backstory";
 
 export const view_user_sheet = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!탐사자 시트')) return;
+
     const view_ability = await get_ability_status(user_id);
     const view_skill = await view_uses_skill_list(user_id);
     const view_user = await view_user_status(user_id);
     const number_of_stat = await exchange_stat(view_skill.uses_skill_stat);
+    const backstory = await view_backstory(user_id);
 
     const embed = new MessageEmbed()
         .setColor('#C171F5')
@@ -17,9 +20,9 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
         .addFields(
             { name: '이름', value: view_user.name ?? '???'},
             { name: '플레이어', value: '<@' + user_id + '>' },
-            { name: '직업', value: view_user.job ?? '??', inline: true},
-            { name: '나이', value: String(view_user.age) ?? '20', inline: true }, 
-            { name: '성별', value: view_user.sex ?? '??', inline: true},
+            { name: '직업', value: view_user.job ?? '???', inline: true},
+            { name: '나이', value: String(view_user.age) ?? '??', inline: true }, 
+            { name: '성별', value: view_user.sex ?? '???', inline: true},
             { name: 'ㅤ', value: '**🔧특성치**', inline: false},
             { name: '💪근력', value: String(view_ability[0]) + '/' +String(Math.floor(view_ability[0] / 2)) + '/' +String(view_ability[0] * 0.2), inline: true },
             { name: '🫀건강', value: String(view_ability[1]) + '/' +String(Math.floor(view_ability[1] / 2)) + '/' +String(view_ability[1] * 0.2), inline: true },
@@ -44,8 +47,8 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
 
     const embed2 = new MessageEmbed()
         .setColor('#C171F5')
-        .setTitle('🪄기능 목록')
         .addFields(
+            { name: '**기능목록**', value: 'ㅤ', inline: false },
             { name: view_skill.uses_skill_name[0] ?? '빈스킬', value: view_skill.uses_skill_stat[0] + ' / ' + String(Math.floor(number_of_stat[0] / 2)) + ' / ' + String(number_of_stat[0] * 0.2) ?? '-', inline: true },
             { name: view_skill.uses_skill_name[1] ?? '빈스킬', value: view_skill.uses_skill_stat[1] + ' / ' + String(Math.floor(number_of_stat[1] / 2)) + ' / ' + String(number_of_stat[1] * 0.2) ?? '-', inline: true },
             { name: view_skill.uses_skill_name[2] ?? '빈스킬', value: view_skill.uses_skill_stat[2] + ' / ' + String(Math.floor(number_of_stat[2] / 2)) + ' / ' + String(number_of_stat[2] * 0.2) ?? '-', inline: true },
@@ -54,7 +57,10 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
             { name: view_skill.uses_skill_name[5] ?? '빈스킬', value: view_skill.uses_skill_stat[5] + ' / ' + String(Math.floor(number_of_stat[5] / 2)) + ' / ' + String(number_of_stat[5] * 0.2) ?? '-', inline: true },
             { name: view_skill.uses_skill_name[6] ?? '빈스킬', value: view_skill.uses_skill_stat[6] + ' / ' + String(Math.floor(number_of_stat[6] / 2)) + ' / ' + String(number_of_stat[6] * 0.2) ?? '-', inline: true },
             { name: view_skill.uses_skill_name[7] ?? '빈스킬', value: view_skill.uses_skill_stat[7] + ' / ' + String(Math.floor(number_of_stat[7] / 2)) + ' / ' + String(number_of_stat[7] * 0.2) ?? '-', inline: true },
+            { name: 'ㅤ', value: '**📖백스토리**\n' + backstory, inline: false },
         )
+       
+
     await message.channel.sendTyping();
     await message.channel.send({ embeds: [embed]});
     await message.channel.send({ embeds: [embed2]});

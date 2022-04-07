@@ -29,4 +29,4 @@ export const create_first_user_status = async (user_id: string) => {
         },
     });
     return;
-}
+};

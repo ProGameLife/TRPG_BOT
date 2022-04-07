@@ -26,6 +26,15 @@ export const update_one_ability = async (user_id: string, ability: number, scope
     return;
 };
 
+export const update_user_backstory = async (user_id: string, backstroy: string) => {
+    await prisma.user_status.update({
+        where: { user_id: user_id },
+        data: {
+            back_story: backstroy,
+        },
+    });
+};
+
 export const update_use_skill_point = async (user_id: string, use_point: number ) => {
     const temp_point = await get_skill_point(user_id);
 

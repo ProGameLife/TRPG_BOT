@@ -79,7 +79,7 @@ export const set_p_url = async (message: Message<boolean>, user_id: string) => {
     
     const p_url = message.content.substring(message.content.indexOf(' ') + 1);
     await update_p_url(user_id, p_url);
-    await message.channel.send(p_url + ' 을(를) 사진 주소로 저장했습니다.');
+    await message.channel.send('사진 주소로 저장했습니다.');
     return;
 };
 

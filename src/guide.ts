@@ -16,7 +16,7 @@ import {
 } from "./message/message_format";
 import { create_first_ability, create_first_skill, create_first_user_status } from "./sql/insert";
 import { ability_stat } from "./ability";
-import { get_count_user_skill_list, get_count_user_status } from "./sql/select";
+import { get_count_backstory, get_count_user_skill_list, get_count_user_status } from "./sql/select";
 import { make_skill_point } from "./skill";
 
 export const send_main_guide =async (client: Client<boolean>) => {
@@ -69,10 +69,11 @@ export const send_job_guide = async (message: Message<boolean>, user_id: string)
 
     return;
 };
-export const send_backstroy_guide = async (message: Message<boolean>) => {
-    if(!(message.content === '!백스토리')) return false;
+
+export const send_backstroy_guide = async (message: Message<boolean>, user_id: string) => {
+    if(!(message.content === '!백스토리')) return;
+
     await message.channel.send(BACKSTORY_GUIDE);
-    
+
     return;
 };
-
