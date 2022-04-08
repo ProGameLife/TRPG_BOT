@@ -30,3 +30,11 @@ export const create_first_user_status = async (user_id: string) => {
     });
     return;
 };
+
+export const create_first_battle_status = async (user_id: string) => {
+    await prisma.battle_status.create({
+        data: {
+            user_id: user_id,
+        },
+    });
+};

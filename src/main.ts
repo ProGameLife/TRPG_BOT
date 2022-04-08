@@ -30,9 +30,10 @@ import {
     set_p_name,
     end_job_command,
 } from "./job";
+import { edit_user_ability } from "./kpc/kpc_command";
 import { create_room } from "./utill/utill";
-import { Client, Intents, MessageActionRow, TextChannel } from "discord.js";
-import { set_dice } from "./dice";
+import { Client, Intents, MessageActionRow, MessageManager, TextChannel } from "discord.js";
+import { san_dice, set_dice } from "./dice";
 import { view_user_sheet } from "./view/view";
 import { make_backstory } from "./backstory";
 import { clear_equip, make_equip } from "./equip";
@@ -60,6 +61,12 @@ client.on('message',async (message) => {
         message.delete();
         await message.channel.bulkDelete(100);
     }
+
+    if(message.content.startsWith('!KPC')){
+        const command = message.content.substring(5);
+        await edit_user_ability(message, command); // !KPC 950231695163031603 근력 40  이렇게 입력 받으면 해당 유저의 탐사자 정보의 근력 값이 40으로 수정 된다
+        
+    }
     
     await send_setup_guide(message);
     await send_ability_guide(message);
@@ -74,6 +81,7 @@ client.on('message',async (message) => {
     await check_manual_ability(message, user_id);
     await delete_ability(message, user_id);
 
+    await san_dice(message, user_id);
     await set_dice(message);
     await set_auto_ability(message, user_id);
     await set_manual_ability(message, user_id);

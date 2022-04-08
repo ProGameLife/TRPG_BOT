@@ -1,17 +1,16 @@
-import { PrismaClient } from "@prisma/client";
-import { get_ability_status } from "../ability"
-import { get_skill_point } from "./select";
-
-const prisma = new PrismaClient();
-
-export const update_one_ability = async (user_id: string, ability: number, scope: number) => {
-    let value = await get_ability_status(user_id)
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.update_p_url = exports.update_p_job = exports.update_p_sex = exports.update_p_age = exports.update_p_name = exports.update_reset_uses_skill = exports.update_skill_point = exports.update_use_skill_point = exports.update_user_backstory = exports.update_san = exports.update_clear_user_equip = exports.update_user_equip = exports.update_kpc_ability = exports.update_one_ability = void 0;
+const client_1 = require("@prisma/client");
+const ability_1 = require("../ability");
+const select_1 = require("./select");
+const prisma = new client_1.PrismaClient();
+const update_one_ability = async (user_id, ability, scope) => {
+    let value = await (0, ability_1.get_ability_status)(user_id);
     value[scope] = ability;
-
     await prisma.ability.update({
         where: { user_id: user_id },
-        data: { 
+        data: {
             str: value[0],
             hel: value[1],
             big: value[2],
@@ -25,15 +24,13 @@ export const update_one_ability = async (user_id: string, ability: number, scope
     });
     return;
 };
-
-export const update_kpc_ability = async (user_id: string, ability: number, scope: number) => {
-    let value = await get_ability_status(user_id);
-
+exports.update_one_ability = update_one_ability;
+const update_kpc_ability = async (user_id, ability, scope) => {
+    let value = await (0, ability_1.get_ability_status)(user_id);
     value[scope] = ability;
-
     await prisma.ability.update({
         where: { user_id: user_id },
-        data: { 
+        data: {
             str: value[0],
             hel: value[1],
             big: value[2],
@@ -51,8 +48,8 @@ export const update_kpc_ability = async (user_id: string, ability: number, scope
     });
     return;
 };
-
-export const update_user_equip = async (user_id: string, equip: string) => {
+exports.update_kpc_ability = update_kpc_ability;
+const update_user_equip = async (user_id, equip) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -60,8 +57,8 @@ export const update_user_equip = async (user_id: string, equip: string) => {
         },
     });
 };
-
-export const update_clear_user_equip = async (user_id: string) => {
+exports.update_user_equip = update_user_equip;
+const update_clear_user_equip = async (user_id) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -69,8 +66,8 @@ export const update_clear_user_equip = async (user_id: string) => {
         },
     });
 };
-
-export const update_san = async (user_id: string, san: number) => {
+exports.update_clear_user_equip = update_clear_user_equip;
+const update_san = async (user_id, san) => {
     await prisma.ability.update({
         where: { user_id: user_id },
         data: {
@@ -78,8 +75,8 @@ export const update_san = async (user_id: string, san: number) => {
         },
     });
 };
-
-export const update_user_backstory = async (user_id: string, backstroy: string) => {
+exports.update_san = update_san;
+const update_user_backstory = async (user_id, backstroy) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -87,10 +84,9 @@ export const update_user_backstory = async (user_id: string, backstroy: string) 
         },
     });
 };
-
-export const update_use_skill_point = async (user_id: string, use_point: number ) => {
-    const temp_point = await get_skill_point(user_id);
-
+exports.update_user_backstory = update_user_backstory;
+const update_use_skill_point = async (user_id, use_point) => {
+    const temp_point = await (0, select_1.get_skill_point)(user_id);
     await prisma.skill.update({
         where: { user_id: user_id },
         data: {
@@ -99,9 +95,9 @@ export const update_use_skill_point = async (user_id: string, use_point: number 
     });
     return;
 };
-
-export const update_skill_point = async (user_id: string, skill_point: number ) => {
-        await prisma.skill.update({
+exports.update_use_skill_point = update_use_skill_point;
+const update_skill_point = async (user_id, skill_point) => {
+    await prisma.skill.update({
         where: { user_id: user_id },
         data: {
             skill_point: skill_point,
@@ -109,8 +105,8 @@ export const update_skill_point = async (user_id: string, skill_point: number ) 
     });
     return;
 };
-
-export const update_reset_uses_skill = async (user_id: string) => {
+exports.update_skill_point = update_skill_point;
+const update_reset_uses_skill = async (user_id) => {
     await prisma.skill_uses.update({
         where: { user_id: user_id },
         data: {
@@ -121,8 +117,8 @@ export const update_reset_uses_skill = async (user_id: string) => {
     });
     return;
 };
-
-export const update_p_name = async (user_id: string, p_name: string) => { // 아름
+exports.update_reset_uses_skill = update_reset_uses_skill;
+const update_p_name = async (user_id, p_name) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -131,8 +127,8 @@ export const update_p_name = async (user_id: string, p_name: string) => { // 아
     });
     return;
 };
-
-export const update_p_age = async (user_id: string, p_age: number) => { // 나이
+exports.update_p_name = update_p_name;
+const update_p_age = async (user_id, p_age) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -141,8 +137,8 @@ export const update_p_age = async (user_id: string, p_age: number) => { // 나�
     });
     return;
 };
-
-export const update_p_sex = async (user_id: string, p_sex: string) => { // 성별
+exports.update_p_age = update_p_age;
+const update_p_sex = async (user_id, p_sex) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -151,8 +147,8 @@ export const update_p_sex = async (user_id: string, p_sex: string) => { // 성�
     });
     return;
 };
-
-export const update_p_job = async (user_id: string, p_job: string) => { // 직업
+exports.update_p_sex = update_p_sex;
+const update_p_job = async (user_id, p_job) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -161,8 +157,8 @@ export const update_p_job = async (user_id: string, p_job: string) => { // 직�
     });
     return;
 };
-
-export const update_p_url = async (user_id: string, p_url: string) => { // 이미지
+exports.update_p_job = update_p_job;
+const update_p_url = async (user_id, p_url) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {
@@ -171,3 +167,4 @@ export const update_p_url = async (user_id: string, p_url: string) => { // 이�
     });
     return;
 };
+exports.update_p_url = update_p_url;

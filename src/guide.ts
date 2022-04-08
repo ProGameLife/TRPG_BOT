@@ -15,9 +15,9 @@ import {
     BACKSTORY_GUIDE,
     EQUIP_GUIDE,
 } from "./message/message_format";
-import { create_first_ability, create_first_skill, create_first_user_status } from "./sql/insert";
+import { create_first_ability, create_first_battle_status, create_first_skill, create_first_user_status } from "./sql/insert";
 import { ability_stat } from "./ability";
-import { get_count_backstory, get_count_user_skill_list, get_count_user_status } from "./sql/select";
+import { get_count_backstory, get_count_battle_status, get_count_user_skill_list, get_count_user_status } from "./sql/select";
 import { make_skill_point } from "./skill";
 
 export const send_main_guide =async (client: Client<boolean>) => {
@@ -57,7 +57,8 @@ export const send_manual_ability_guide = async (message: Message<boolean>, user_
 export const send_skill_guide = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!기능')) return;
     if(await get_count_user_skill_list(user_id) === 0) await create_first_skill(user_id, await make_skill_point(user_id));
-
+    if(await get_count_battle_status(user_id) === 0) await create_first_battle_status(user_id);
+    
     message.channel.send(MAKE_SKILL_SET_GUIDE);
 };
 
