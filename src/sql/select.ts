@@ -234,3 +234,14 @@ export const get_count_battle_status = async (user_id: string) => {
     });
     return user_battle_status;
 };
+
+export const get_battle_status = async (user_id: string) => {
+    const user_battle_status = await prisma.battle_status.findMany({
+        select: {
+            long_mad: true,
+            dead: true,
+        },
+        where: { user_id: user_id },
+    });
+    return user_battle_status;
+};

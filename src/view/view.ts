@@ -4,6 +4,7 @@ import { view_user_status } from "../job";
 import { view_uses_skill_list } from "../skill";
 import { view_backstory } from "../backstory";
 import { view_equip } from "../equip";
+import { get_battle_status } from "../sql/select";
 
 export const view_user_sheet = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!탐사자 시트')) return;
@@ -14,6 +15,7 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
     const number_of_stat = await exchange_stat(view_skill.uses_skill_stat);
     const backstory = await view_backstory(user_id);
     const equip = await view_equip(user_id);
+    const battle_status = await view_battle_status(user_id);
 
     const embed = new MessageEmbed()
         .setColor('#C171F5')
@@ -40,11 +42,11 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
             { name: '🩸HP', value: String(view_ability[10]), inline: true },
             { name: '🔷MP', value: String(view_ability[11]), inline: true },
             { name: '👽이성치', value: String(view_ability[12]), inline: true },
-            { name: '🤪광기(일시적,장기적)', value: '``X``', inline: true },
+            { name: '🤪광기(일시적,장기적)', value: battle_status[0], inline: true },
             { name: 'ㅤ', value: '**🗡전투 특성치**', inline: false },
             { name: '👊피해 보너스', value: '없음', inline: true },
             { name: '🏃회피', value: String(Math.floor(view_ability[3] / 2)), inline: true },
-            { name: '💀빈사(의식불명)', value: '``X``', inline: true },
+            { name: '💀빈사(의식불명)', value: battle_status[1], inline: true },
         )
 
     const embed2 = new MessageEmbed()
@@ -76,3 +78,17 @@ export const exchange_stat = async(stat: String[]) => {
 
     return number_stat;
 };
+
+export const view_battle_status = async (user_id: string) => {
+    const battle_status = await get_battle_status(user_id);
+    
+    const mad = battle_status.flatMap((element) => {
+        return element.long_mad;
+    });
+    const dead = battle_status.flatMap((element) => {
+        return element.dead;
+    });
+    const result = [mad[0], dead[0]];
+
+    return result;
+}

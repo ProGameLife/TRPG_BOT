@@ -52,6 +52,33 @@ export const update_kpc_ability = async (user_id: string, ability: number, scope
     return;
 };
 
+export const update_kpc_mad = async (user_id: string, stat: string) => {
+    await prisma.battle_status.update({
+        where: { user_id: user_id },
+        data: {
+            long_mad: stat,
+        },
+    });
+};
+
+export const update_kpc_dead = async (user_id: string, stat: string) => {
+    await prisma.battle_status.update({
+        where: { user_id: user_id },
+        data: {
+            dead: stat,
+        },
+    });
+};
+
+// export const update_kpc_battle_status = async (user_id: string, stat: string, flag: number) => {
+//     if(flag === 13){
+
+//     }
+//     if(flag === 14){
+
+//     }
+// }
+
 export const update_user_equip = async (user_id: string, equip: string) => {
     await prisma.user_status.update({
         where: { user_id: user_id },

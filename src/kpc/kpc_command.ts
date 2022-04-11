@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
-import { update_kpc_ability } from "../sql/update";
+import { get_user_status } from "../sql/select";
+import { update_kpc_ability, update_kpc_dead, update_kpc_mad } from "../sql/update";
 
 export const edit_user_ability = async (message: Message<boolean>, kpc_command: string) => {
     const command = kpc_command.split(' '); // user_id[0] 이성치[1] 45[2]
@@ -7,6 +8,10 @@ export const edit_user_ability = async (message: Message<boolean>, kpc_command: 
     const ability = command[1].toUpperCase();
     const stat = command[2];
     let scope = 0;
+    const pmc_status = await get_user_status(user_id);
+    const user_name = pmc_status.flatMap((element) => {
+        return element.p_name;
+    });
 
     switch(ability){
         case '근력':
@@ -54,9 +59,24 @@ export const edit_user_ability = async (message: Message<boolean>, kpc_command: 
         case '빈사':
             scope = 14;
             break;
+        case '':
+            
+            break;
     }
+
     if(scope < 13){
         await update_kpc_ability(user_id, Number(stat), scope);
-        await message.channel.send('<@' + user_id + '> 의 ' + ability +' 을(를) ' + stat + ' 으로 변경 하였씁니다.');
+        await message.channel.send(user_name + ' 가 ' + ability +' 을(를) ' + stat + ' 으로 변경 하였씁니다.');
+    }
+    if(scope === 13){
+        await update_kpc_mad(user_id, stat);
+        await message.channel.send(user_name + ' 의 광기 상태가 ' + stat + ' 으로 변경 하였씁니다.');
+    }
+    if(scope === 14){
+        await update_kpc_dead(user_id, stat);
+        await message.channel.send(user_name + ' 의 상태가 ' + stat + ' 으로 변경 하였씁니다.');
+    }
+    if(scope === 15){
+        
     }
 };

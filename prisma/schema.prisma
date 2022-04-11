@@ -114,7 +114,6 @@ model battle_status {
   user_id      String @id @db.VarChar(64)
   bonus_attack String @default("") @db.VarChar(8)
   physique     String @default("") @db.VarChar(8)
-  short_mad    String @default("") @db.VarChar(16)
   long_mad     String @default("") @db.VarChar(16)
-  dead         String @default("") @db.VarChar(16)
+  dead         String @default("정상") @db.VarChar(16)
 }
