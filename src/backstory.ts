@@ -12,7 +12,6 @@ export const make_backstory = async (message: Message<boolean>, user_id: string)
 };
 
 export const view_backstory = async (user_id: string) => {
-
     const data_backstory = await get_backstory(user_id);
     const backstory = data_backstory.flatMap((element) => {
         return element.back_story;

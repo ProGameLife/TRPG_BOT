@@ -8,6 +8,10 @@ import {
     update_p_name,
 } from "./sql/update";
 
+export let add_job = {
+    start: false,
+};
+
 export const view_user_status = async (user_id: string) => {
     const user_status = await get_user_status(user_id);
 
@@ -87,6 +91,6 @@ export const end_job_command = async (message: Message<boolean>) => {
     if(!(message.content === '!정보 입력 완료')) return;
 
     await message.channel.send('탐사자 정보 입력이 되었습니다. ``!탐사자 시트`` 명령어로 확인 후 ``!가이드`` 명령어로 계속 진행하세요');
-
-    return
-}
+    add_job.start = false;
+    return;
+};

@@ -49,6 +49,7 @@ export const update_kpc_ability = async (user_id: string, ability: number, scope
             san: value[12],
         },
     });
+
     return;
 };
 
@@ -59,6 +60,8 @@ export const update_kpc_mad = async (user_id: string, stat: string) => {
             long_mad: stat,
         },
     });
+
+    return;
 };
 
 export const update_kpc_dead = async (user_id: string, stat: string) => {
@@ -68,6 +71,8 @@ export const update_kpc_dead = async (user_id: string, stat: string) => {
             dead: stat,
         },
     });
+
+    return;
 };
 
 // export const update_kpc_battle_status = async (user_id: string, stat: string, flag: number) => {
@@ -86,6 +91,8 @@ export const update_user_equip = async (user_id: string, equip: string) => {
             equip: equip,
         },
     });
+
+    return;
 };
 
 export const update_clear_user_equip = async (user_id: string) => {
@@ -95,6 +102,8 @@ export const update_clear_user_equip = async (user_id: string) => {
             equip: '',
         },
     });
+
+    return;
 };
 
 export const update_san = async (user_id: string, san: number) => {
@@ -104,6 +113,8 @@ export const update_san = async (user_id: string, san: number) => {
             san: san,
         },
     });
+
+    return;
 };
 
 export const update_user_backstory = async (user_id: string, backstroy: string) => {
@@ -113,6 +124,8 @@ export const update_user_backstory = async (user_id: string, backstroy: string) 
             back_story: backstroy,
         },
     });
+
+    return;
 };
 
 export const update_use_skill_point = async (user_id: string, use_point: number ) => {
@@ -124,6 +137,7 @@ export const update_use_skill_point = async (user_id: string, use_point: number 
             skill_point: temp_point - use_point,
         },
     });
+
     return;
 };
 
@@ -134,6 +148,7 @@ export const update_skill_point = async (user_id: string, skill_point: number ) 
             skill_point: skill_point,
         },
     });
+
     return;
 };
 
@@ -146,6 +161,7 @@ export const update_reset_uses_skill = async (user_id: string) => {
             skill_stat: ''
         },
     });
+
     return;
 };
 
@@ -156,6 +172,7 @@ export const update_p_name = async (user_id: string, p_name: string) => { // ì•„
             p_name: p_name,
         },
     });
+
     return;
 };
 
@@ -166,6 +183,7 @@ export const update_p_age = async (user_id: string, p_age: number) => { // ë‚˜ì
             p_age: p_age,
         },
     });
+
     return;
 };
 
@@ -176,6 +194,7 @@ export const update_p_sex = async (user_id: string, p_sex: string) => { // ì„±ë³
             p_sex: p_sex,
         },
     });
+
     return;
 };
 
@@ -186,6 +205,7 @@ export const update_p_job = async (user_id: string, p_job: string) => { // ì§ì—
             p_job: p_job,
         },
     });
+
     return;
 };
 
@@ -196,5 +216,6 @@ export const update_p_url = async (user_id: string, p_url: string) => { // ì´ë¯
             image_link: p_url,
         },
     });
+    
     return;
 };

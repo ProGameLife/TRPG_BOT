@@ -7,11 +7,12 @@ export const edit_user_ability = async (message: Message<boolean>, kpc_command: 
     const user_id = command[0];
     const ability = command[1].toUpperCase();
     const stat = command[2];
-    let scope = 0;
     const pmc_status = await get_user_status(user_id);
     const user_name = pmc_status.flatMap((element) => {
         return element.p_name;
     });
+    
+    let scope = 0;
 
     switch(ability){
         case '근력':

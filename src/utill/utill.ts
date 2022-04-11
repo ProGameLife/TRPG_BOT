@@ -1,8 +1,8 @@
 import { 
-    ButtonInteraction, 
-    TextChannel,
-    CacheType, 
     Client,
+    CacheType, 
+    TextChannel,
+    ButtonInteraction, 
 } from "discord.js";
 import { USER_ALL_GUIDE } from "../message/message_format";
 
@@ -16,6 +16,7 @@ export const create_room = async (interaction: ButtonInteraction<CacheType>, cha
     const create_category = await channel.guild.channels.create(category_name, {
         type: 'GUILD_CATEGORY',
     });
+    
     const create_channel = await channel.guild.channels.create('채팅방', {
         type: 'GUILD_TEXT',
         permissionOverwrites: [{
@@ -24,6 +25,7 @@ export const create_room = async (interaction: ButtonInteraction<CacheType>, cha
         }],
         parent: create_category.id,
     });
+
     await channel.guild.channels.create(voice_channel_name, {
         type: 'GUILD_VOICE',
         permissionOverwrites: [{
@@ -35,5 +37,6 @@ export const create_room = async (interaction: ButtonInteraction<CacheType>, cha
 
     const new_channel = await client.channels.fetch(create_channel.id) as TextChannel; 
     await new_channel.send(USER_ALL_GUIDE);
+
     return;
 };

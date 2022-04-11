@@ -13,6 +13,7 @@ export const get_ability = async (user_id: string) => {
         },
         where: { user_id: user_id },
     });
+
     return get_ability;
 };
 
@@ -26,6 +27,7 @@ export const get_ability_idea = async (user_id: string) => {
     const result = get_ability_idea.flatMap((element) => {
         return element.idea;
     });
+
     return result[0];
 };
 
@@ -40,6 +42,7 @@ export const get_manual_ability = async (user_id: string) => {
         },
         where: { user_id: user_id },
     });
+
     return get_ability;
 };
 
@@ -62,7 +65,128 @@ export const get_all_ability = async (user_id: string) => {
         },
         where: { user_id: user_id },
     });
+    
     return get_all_ability;
+};
+
+export const get_count_user_skill_list = async (user_id: string) => {
+    const count_user_skill = await prisma.skill.count({
+        where: { user_id: user_id },
+    });
+
+    return count_user_skill;
+};
+
+export const get_skill_point = async (user_id: string) => {
+    const skill_point = await prisma.skill.findMany({
+        select: { skill_point: true },
+        where: { user_id: user_id},
+    });
+    const result = skill_point.flatMap((element) => {
+        return element.skill_point;
+    });
+
+    return result[0];
+};
+
+export const get_uses_skill_list = async (user_id: string) => {
+    const uses_skill_list = await prisma.skill_uses.findMany({
+        select: { 
+            use_point: true,
+            skill_name: true,
+            skill_stat: true,
+        },
+        where: {
+            user_id: user_id,
+        },
+    });
+
+    return uses_skill_list;
+};
+
+export const get_count_uses_skill_list = async (user_id: string) => {
+    const count_uses_skill = await prisma.skill_uses.count({
+        where: { user_id: user_id },
+    });
+
+    return count_uses_skill;
+};
+
+export const get_count_user_status = async (user_id: string) => {
+    const count_user_status = await prisma.user_status.count({
+        where: { user_id: user_id },
+    });
+
+    return count_user_status;
+};
+
+export const get_user_status = async (user_id: string) => {
+    const user_status = await prisma.user_status.findMany({
+        select: {
+            p_name: true,
+            p_sex: true,
+            p_job: true,
+            p_age: true,
+            image_link: true,
+        },
+        where: { user_id: user_id },
+    });
+
+    return user_status;
+};
+
+export const get_count_backstory = async (user_id: string) => {
+    const user_backstroty = await prisma.user_status.count({
+        where: { user_id: user_id },
+    });
+
+    return user_backstroty;
+};
+
+export const get_backstory = async (user_id: string) => {
+    const backstory = await prisma.user_status.findMany({
+        select: { back_story: true },
+        where: { user_id: user_id },
+    });
+
+    return backstory;
+};
+
+export const get_equip = async (user_id: string) => {
+    const equip = await prisma.user_status.findMany({
+        select: { equip: true },
+        where: { user_id: user_id },
+    });
+
+    return equip;
+};
+
+export const get_count_equip = async (user_id: string) => {
+    const user_backstroty = await prisma.user_status.count({
+        where: { user_id: user_id },
+    });
+
+    return user_backstroty;
+};
+
+export const get_count_battle_status = async (user_id: string) => {
+    const user_battle_status = await prisma.battle_status.count({
+        where: { user_id: user_id },
+    });
+
+    return user_battle_status;
+};
+
+export const get_battle_status = async (user_id: string) => {
+    const user_battle_status = await prisma.battle_status.findMany({
+        select: {
+            long_mad: true,
+            dead: true,
+        },
+        where: { user_id: user_id },
+    });
+
+    return user_battle_status;
 };
 
 export const get_skill_list = async (user_id: string) => {
@@ -135,113 +259,6 @@ export const get_skill_list = async (user_id: string) => {
         },
         where: { user_id: user_id },
     });
+    
     return get_all_skill_list;
-};
-
-export const get_count_user_skill_list = async (user_id: string) => {
-    const count_user_skill = await prisma.skill.count({
-        where: { user_id: user_id },
-    });
-    return count_user_skill;
-};
-
-export const get_skill_point = async (user_id: string) => {
-    const skill_point = await prisma.skill.findMany({
-        select: { skill_point: true },
-        where: { user_id: user_id},
-    });
-    const result = skill_point.flatMap((element) => {
-        return element.skill_point;
-    });
-    return result[0];
-};
-
-export const get_uses_skill_list = async (user_id: string) => {
-    const uses_skill_list = await prisma.skill_uses.findMany({
-        select: { 
-            use_point: true,
-            skill_name: true,
-            skill_stat: true,
-        },
-        where: {
-            user_id: user_id,
-        },
-    });
-    return uses_skill_list;
-};
-
-export const get_count_uses_skill_list = async (user_id: string) => {
-    const count_uses_skill = await prisma.skill_uses.count({
-        where: { user_id: user_id },
-    });
-    return count_uses_skill;
-};
-
-export const get_count_user_status = async (user_id: string) => {
-    const count_user_status = await prisma.user_status.count({
-        where: { user_id: user_id },
-    });
-    return count_user_status;
-};
-
-export const get_user_status = async (user_id: string) => {
-    const user_status = await prisma.user_status.findMany({
-        select: {
-            p_name: true,
-            p_sex: true,
-            p_job: true,
-            p_age: true,
-            image_link: true,
-        },
-        where: { user_id: user_id },
-    });
-    return user_status;
-};
-
-export const get_count_backstory = async (user_id: string) => {
-    const user_backstroty = await prisma.user_status.count({
-        where: { user_id: user_id },
-    });
-    return user_backstroty;
-};
-
-export const get_backstory = async (user_id: string) => {
-    const backstory = await prisma.user_status.findMany({
-        select: { back_story: true },
-        where: { user_id: user_id },
-    });
-    return backstory;
-};
-
-export const get_equip = async (user_id: string) => {
-    const equip = await prisma.user_status.findMany({
-        select: { equip: true },
-        where: { user_id: user_id },
-    });
-    return equip;
-};
-
-export const get_count_equip = async (user_id: string) => {
-    const user_backstroty = await prisma.user_status.count({
-        where: { user_id: user_id },
-    });
-    return user_backstroty;
-};
-
-export const get_count_battle_status = async (user_id: string) => {
-    const user_battle_status = await prisma.battle_status.count({
-        where: { user_id: user_id },
-    });
-    return user_battle_status;
-};
-
-export const get_battle_status = async (user_id: string) => {
-    const user_battle_status = await prisma.battle_status.findMany({
-        select: {
-            long_mad: true,
-            dead: true,
-        },
-        where: { user_id: user_id },
-    });
-    return user_battle_status;
 };

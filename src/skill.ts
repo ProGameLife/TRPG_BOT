@@ -59,8 +59,20 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
     }
 
     switch(true){
-        case ['생물학', '컴퓨터', '전자공학', '지질학', '외국어', '물리학', '인류학', '천문학', '화학', '자물쇠다루기', '조종', '정신분석', '고고학', '변장', '무술'].includes(skill_name):
-            skill_stat += 1;
+        case ['등반'].includes(skill_name):
+            skill_stat += 40;
+            break;
+        case ['주먹질'].includes(skill_name):
+            skill_stat += 50;
+            break;
+        case ['응급치료', '산탄총사격'].includes(skill_name):
+            skill_stat += 30;
+            break;
+        case ['기계수리', '운전', '역사', '권총사격'].includes(skill_name):
+            skill_stat += 20;
+            break;
+        case ['신용', '기관총사격', '기관단총', '매혹', '은닉', '설득'].includes(skill_name):
+            skill_stat += 15;
             break;
         case ['예술', '승마', '의학', '신비학', '흥정', '제작', '심리학'].includes(skill_name):
             skill_stat += 5;
@@ -68,23 +80,11 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
         case ['회계', '위치파악', '박치기', '숨기', '추적', '전기수리', '자연사', '사진술', '수학'].includes(skill_name):
             skill_stat += 10;
             break;
-        case ['신용', '기관총사격', '기관단총', '매혹', '은닉', '설득'].includes(skill_name):
-            skill_stat += 15;
-            break;
-        case ['기계수리', '운전', '역사', '권총사격'].includes(skill_name):
-            skill_stat += 20;
-            break;
         case ['도약', '듣기', '던지기', '잠행', '소총사격', '발차기', '자료조사', '수영', '붙잡기', '관찰력'].includes(skill_name):
             skill_stat += 25;
             break;
-        case ['응급치료', '산탄총사격'].includes(skill_name):
-            skill_stat += 30;
-            break;
-        case ['등반'].includes(skill_name):
-            skill_stat += 40;
-            break;
-        case ['주먹질'].includes(skill_name):
-            skill_stat += 50;
+        case ['생물학', '컴퓨터', '전자공학', '지질학', '외국어', '물리학', '인류학', '천문학', '화학', '자물쇠다루기', '조종', '정신분석', '고고학', '변장', '무술'].includes(skill_name):
+            skill_stat += 1;
             break;
     }
     const skill_data = await make_uses_skill_data(user_id, skill_name, skill_stat, temp_stat);
@@ -92,10 +92,12 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
     await update_use_skill_point(user_id, temp_stat); // 잔여기능포인트 업데이트
     await upsert_uses_skill(user_id, skill_data.skill_name, skill_data.skill_stat, skill_data.use_point);
     await message.channel.send(skill_name + '( ' + skill_stat + '% ) 기능이 추가 되었습니다.');
+
+    return;
 };
 
 export const show_user_skill_list = async (message: Message<boolean> , user_id: string) => {
-    if(!(message.content === '!내기능목록')) return;
+    if(!(message.content === '!현재기능목록')) return;
     const show_skill_list = get_uses_skill_list(user_id);
     const use_point = (await show_skill_list).flatMap((element) => {
         return element.use_point;
@@ -108,6 +110,8 @@ export const show_user_skill_list = async (message: Message<boolean> , user_id: 
     });
 
     message.channel.send('사용한 포인트 : ' + use_point[0] + '\n기능 목록들 : ' + skill_name[0] + '\n기능 스탯들 : ' + skill_stat[0]);
+    
+    return;
 }
 
 const make_uses_skill_data = async (user_id: string, skill_name: string, skill_stat: number, temp_point: number) => {
@@ -139,6 +143,7 @@ const make_uses_skill_data = async (user_id: string, skill_name: string, skill_s
         skill_name: skill_name,
         use_point: use_point,
     }
+
     return result;
 }
 
@@ -149,10 +154,13 @@ export const clear_user_skill = async (message: Message<boolean>, user_id: strin
     await update_reset_uses_skill(user_id);
     
     await message.channel.send('기능 초기화 되었습니다. 기능을 다시 추가 해주세요.');
+
+    return;
 };
 
 export const make_skill_point = async (user_id: string) => {
     const idea = await get_ability_idea(user_id) * 2;
+
     return idea;
 };
 
@@ -176,6 +184,7 @@ export const view_uses_skill_list = async (user_id: string) => {
         uses_skill_name: uses_skill_name,
         uses_skill_stat: uses_skill_stat,
     };
+
     return result;
 };
 
@@ -374,15 +383,72 @@ export const make_user_skill_list = async (user_id: string) => {
     const charm = skill_list.flatMap((element) => { // 매혹
         return element.charm
     });
+
     let result_skill: Number[] = [
-        skill_point[0], accounting[0], anthropology[0], archaeology[0], art[0], astronomy[0], bargain[0], biology[0],
-        chemistry[0], climb[0], computer[0], conceal[0], craft[0], credit_rating[0], cthulhu_mythos[0], disguise[0],
-        dodge[0], drive_automobile[0], electrical_repair[0], electronics[0], fast_talk[0], first_aid[0], geology[0], 
-        hide[0], history[0], jump[0], law[0], library_use[0], listener[0], locksmith[0], martial_arts[0], mechanical_repair[0], 
-        medicine[0], natural_history[0], navigate[0], occult[0], operate_heavy_machine[0], other_language[0], own_language[0], 
-        photography[0], physics[0], pilot[0], aircraft_control[0], ship_control[0], psychoanalysis[0], psychology[0], ride[0], 
-        sneak[0], swim[0], throws[0], track[0], handgun[0], machine_gun[0], rifle[0], shotgun[0], submachine_gun[0], fist_punch[0], 
-        grapple[0], head_buff[0], kick[0], observation[0], charm[0], persuade[0], math[0]
+        skill_point[0], 
+        accounting[0], 
+        anthropology[0], 
+        archaeology[0], 
+        art[0], 
+        astronomy[0], 
+        bargain[0], 
+        biology[0],
+        chemistry[0], 
+        climb[0], 
+        computer[0], 
+        conceal[0], 
+        craft[0], 
+        credit_rating[0], 
+        cthulhu_mythos[0], 
+        disguise[0],
+        dodge[0], 
+        drive_automobile[0], 
+        electrical_repair[0], 
+        electronics[0], 
+        fast_talk[0], 
+        first_aid[0], 
+        geology[0], 
+        hide[0], 
+        history[0], 
+        jump[0], 
+        law[0], 
+        library_use[0], 
+        listener[0], 
+        locksmith[0], 
+        martial_arts[0], 
+        mechanical_repair[0], 
+        medicine[0], 
+        natural_history[0], 
+        navigate[0], 
+        occult[0], 
+        operate_heavy_machine[0], 
+        other_language[0], 
+        own_language[0], 
+        photography[0], 
+        physics[0], 
+        pilot[0], 
+        aircraft_control[0], 
+        ship_control[0], 
+        psychoanalysis[0], 
+        psychology[0], 
+        ride[0], 
+        sneak[0], 
+        swim[0], 
+        throws[0], 
+        track[0], 
+        handgun[0], 
+        machine_gun[0], 
+        rifle[0], 
+        shotgun[0], 
+        submachine_gun[0], 
+        fist_punch[0], 
+        grapple[0], 
+        head_buff[0], 
+        kick[0], 
+        observation[0], 
+        charm[0], 
+        persuade[0], 
+        math[0]
     ]
     return result_skill.toString().split(',');
 };

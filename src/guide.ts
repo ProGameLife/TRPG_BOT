@@ -8,16 +8,26 @@ import {
 import { 
     JOB_GUIDE,
     MAIN_GUIDE, 
+    EQUIP_GUIDE,
     USER_ALL_GUIDE, 
+    BACKSTORY_GUIDE,
     MAKE_ABILITY_GUIDE, 
     MAKE_SKILL_SET_GUIDE,
     MAKE_ABILITY_MANUAL_GUIDE,
-    BACKSTORY_GUIDE,
-    EQUIP_GUIDE,
 } from "./message/message_format";
-import { create_first_ability, create_first_battle_status, create_first_skill, create_first_user_status } from "./sql/insert";
+import { 
+    create_first_skill, 
+    create_first_ability, 
+    create_first_user_status, 
+    create_first_battle_status, 
+} from "./sql/insert";
+import { 
+    get_count_user_status,
+    get_count_battle_status, 
+    get_count_user_skill_list, 
+} from "./sql/select";
+import { add_job } from "./job";
 import { ability_stat } from "./ability";
-import { get_count_backstory, get_count_battle_status, get_count_user_skill_list, get_count_user_status } from "./sql/select";
 import { make_skill_point } from "./skill";
 
 export const send_main_guide =async (client: Client<boolean>) => {
@@ -39,34 +49,39 @@ export const send_main_guide =async (client: Client<boolean>) => {
 
 export const send_ability_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!특성치')) return;
-    message.channel.send(MAKE_ABILITY_GUIDE);
+    await message.channel.send(MAKE_ABILITY_GUIDE);
 };
 
 export const send_setup_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!가이드')) return;
-    message.channel.send(USER_ALL_GUIDE);
+    await message.channel.send(USER_ALL_GUIDE);
 };
 
 export const send_manual_ability_guide = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!특성치 입력')) return;
     ability_stat.start = true;
     create_first_ability(user_id);
-    message.channel.send(MAKE_ABILITY_MANUAL_GUIDE);
+    await message.channel.send(MAKE_ABILITY_MANUAL_GUIDE);
 };
 
 export const send_skill_guide = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!기능')) return;
-    if(await get_count_user_skill_list(user_id) === 0) await create_first_skill(user_id, await make_skill_point(user_id));
     if(await get_count_battle_status(user_id) === 0) await create_first_battle_status(user_id);
+    if(await get_count_user_skill_list(user_id) === 0) await create_first_skill(user_id, await make_skill_point(user_id));
     
-    message.channel.send(MAKE_SKILL_SET_GUIDE);
+    await message.channel.send(MAKE_SKILL_SET_GUIDE);
+
+    return;
 };
 
 export const send_job_guide = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!직업')) return;
+
     if(await get_count_user_status(user_id) === 0){
         await create_first_user_status(user_id);
     }
+
+    add_job.start = true;
     await message.channel.send(JOB_GUIDE);
 
     return;
