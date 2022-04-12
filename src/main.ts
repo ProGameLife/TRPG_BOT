@@ -18,6 +18,7 @@ import {
     clear_manual_ability,
 } from "./ability";
 import { 
+    end_user_skill,
     clear_user_skill,
     add_user_skill_list,
     show_user_skill_list,
@@ -62,7 +63,7 @@ client.on('message',async (message) => {
     if(message.content === '!정리'){
         message.delete();
         await message.channel.bulkDelete(100);
-    };
+    }
 
     if(message.content.startsWith('!KPC')){
         const command = message.content.substring(5);
@@ -89,9 +90,10 @@ client.on('message',async (message) => {
         await add_user_skill_list(message, user_id);
         await show_user_skill_list(message, user_id);
         await get_user_all_skill_list(message, user_id);
+        await end_user_skill(message);
     }
 
-    if(message.content.includes('!dice')){
+    if(message.content.includes('dice')){
         await set_dice(message);
         await san_dice(message, user_id);
     }

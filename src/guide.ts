@@ -40,21 +40,27 @@ export const send_main_guide =async (client: Client<boolean>) => {
                 .setLabel('방 생성하기')
                 .setStyle('SUCCESS')
         )
-    
+
     await channel.sendTyping();
     await channel.send('>>> ' + MAIN_GUIDE);
     // +  '\n\n' + '대기중인 방 수 : ``' + ready_room + '``\n진행중인 방 수 : ``' + play_room + '``'
     await channel.send({ components: [row] });
+
+    return;
 };
 
 export const send_ability_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!특성치')) return;
     await message.channel.send(MAKE_ABILITY_GUIDE);
+
+    return;
 };
 
 export const send_setup_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!가이드')) return;
     await message.channel.send(USER_ALL_GUIDE);
+    
+    return;
 };
 
 export const send_manual_ability_guide = async (message: Message<boolean>, user_id: string) => {
@@ -62,6 +68,8 @@ export const send_manual_ability_guide = async (message: Message<boolean>, user_
     ability_stat.start = true;
     create_first_ability(user_id);
     await message.channel.send(MAKE_ABILITY_MANUAL_GUIDE);
+
+    return;
 };
 
 export const send_skill_guide = async (message: Message<boolean>, user_id: string) => {
@@ -80,7 +88,6 @@ export const send_job_guide = async (message: Message<boolean>, user_id: string)
     if(await get_count_user_status(user_id) === 0){
         await create_first_user_status(user_id);
     }
-
     add_job.start = true;
     await message.channel.send(JOB_GUIDE);
 
@@ -89,7 +96,6 @@ export const send_job_guide = async (message: Message<boolean>, user_id: string)
 
 export const send_backstroy_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!백스토리')) return;
-
     await message.channel.send(BACKSTORY_GUIDE);
 
     return;
@@ -97,7 +103,6 @@ export const send_backstroy_guide = async (message: Message<boolean>) => {
 
 export const send_equip_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!장비')) return;
-
     await message.channel.send(EQUIP_GUIDE);
 
     return;

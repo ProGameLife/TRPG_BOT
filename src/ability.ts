@@ -96,7 +96,7 @@ export const clear_manual_ability = async (message: Message<boolean>, user_id: s
     for(let i = 0; i < 8; i++){ //이동력이나 체력 엠피 이성치는 빼고 해야하기 때문에 8로 설정
         if(!(status[i] === 0)) ability_stat.stack += 1;
     }
-    if(!(ability_stat.stack === 9)) {// 0~8 = 9이기 때문
+    if(!(ability_stat.stack === 9) && ability_stat.start) {// 0~8 = 9이기 때문, 특성치 입력을 수동으로 할 때만이니까 조건 추가
         await message.channel.send('특성이 아직 모두 입력되지 않았습니다. ``!특성치 확인``명령어로 확인 하십시오');
         ability_stat.stack = 0;
         return;

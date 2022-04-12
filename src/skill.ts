@@ -13,6 +13,10 @@ import {
 } from "./sql/update";
 import { upsert_uses_skill } from "./sql/upsert";
 
+export let skill_add = {
+    start: false,
+};
+
 export const get_user_all_skill_list = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!기능목록')) return;
 
@@ -97,7 +101,7 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
 };
 
 export const show_user_skill_list = async (message: Message<boolean> , user_id: string) => {
-    if(!(message.content === '!현재기능목록')) return;
+    if(!(message.content === '!기능확인')) return;
     const show_skill_list = get_uses_skill_list(user_id);
     const use_point = (await show_skill_list).flatMap((element) => {
         return element.use_point;
@@ -112,13 +116,17 @@ export const show_user_skill_list = async (message: Message<boolean> , user_id: 
     message.channel.send('사용한 포인트 : ' + use_point[0] + '\n기능 목록들 : ' + skill_name[0] + '\n기능 스탯들 : ' + skill_stat[0]);
     
     return;
-}
+};
 
 const make_uses_skill_data = async (user_id: string, skill_name: string, skill_stat: number, temp_point: number) => {
     let use_point = 0;
     let temp_skill_stat = '';
+    const check_skill = await get_uses_skill_list(user_id);
+    const ckeck_skill_name = check_skill.flatMap((element) => {
+        return element.skill_name;
+    })
 
-    if(await get_count_uses_skill_list(user_id) === 1){ // 이미 기능추가를 한적있는지
+    if(!(ckeck_skill_name[0] === '')){ // 이미 기능추가를 한적있는지
         const skill_uses_list = get_uses_skill_list(user_id);
         const use_stack_point = (await skill_uses_list).flatMap((element) => { // 지금까지 사용한 포인트
             return element.use_point;
@@ -145,7 +153,7 @@ const make_uses_skill_data = async (user_id: string, skill_name: string, skill_s
     }
 
     return result;
-}
+};
 
 export const clear_user_skill = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!기능초기화')) return;
@@ -164,6 +172,15 @@ export const make_skill_point = async (user_id: string) => {
     return idea;
 };
 
+export const end_user_skill = async (message: Message<boolean>, ) => {
+    if(!(message.content === '!기능 입력 완료')){
+        skill_add.start = true;
+    }
+
+    await message.channel.send('기능 입력이 완료되었습니다. ``!가이드`` 명령어 입력 후 계속 진행해주세요');
+    return;
+};
+
 export const view_uses_skill_list = async (user_id: string) => {
     const uses_skill_list = await get_uses_skill_list(user_id);
 
@@ -179,11 +196,12 @@ export const view_uses_skill_list = async (user_id: string) => {
 
     if(uses_skill_name[0] === '') uses_skill_name.shift();
     if(uses_skill_stat[0] === '') uses_skill_stat.shift();
-
+    
     const result = {
         uses_skill_name: uses_skill_name,
         uses_skill_stat: uses_skill_stat,
     };
+    console.log(result);
 
     return result;
 };

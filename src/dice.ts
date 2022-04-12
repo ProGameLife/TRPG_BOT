@@ -52,7 +52,6 @@ export const san_dice = async (message: Message<boolean>, user_id: string) => {
     const pos1 = dice_command[0].indexOf('/') + 1; 
     const pos2 = dice_command[0].indexOf('D') + 1;
     const pos3 = dice_command[0].indexOf('+')  === -1 ? dice_command[0].length : dice_command[0].indexOf('+');
-
     const main_san = dice_command[0].substring(0, pos1 - 1);
 
     if(Number(user_san[0]) >= first_dice){

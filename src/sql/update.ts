@@ -75,15 +75,6 @@ export const update_kpc_dead = async (user_id: string, stat: string) => {
     return;
 };
 
-// export const update_kpc_battle_status = async (user_id: string, stat: string, flag: number) => {
-//     if(flag === 13){
-
-//     }
-//     if(flag === 14){
-
-//     }
-// }
-
 export const update_user_equip = async (user_id: string, equip: string) => {
     await prisma.user_status.update({
         where: { user_id: user_id },
@@ -216,6 +207,6 @@ export const update_p_url = async (user_id: string, p_url: string) => { // ì´ë¯
             image_link: p_url,
         },
     });
-    
+
     return;
 };

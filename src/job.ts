@@ -48,6 +48,7 @@ export const set_p_name = async (message: Message<boolean>, user_id: string) => 
     const p_name = message.content.substring(message.content.indexOf(' ') + 1);
     await update_p_name(user_id, p_name);
     await message.channel.send(p_name + '을(를) 이름으로 저장했습니다.');
+
     return;
 };
 
@@ -57,6 +58,7 @@ export const set_p_age = async (message: Message<boolean>, user_id: string) => {
     const p_age = message.content.substring(message.content.indexOf(' ') + 1);
     await update_p_age(user_id, Number(p_age));
     await message.channel.send(p_age + ' 을(를) 나이로 저장했습니다.');
+
     return;
 };
 
@@ -66,6 +68,7 @@ export const set_p_job = async (message: Message<boolean>, user_id: string) => {
     const p_job = message.content.substring(message.content.indexOf(' ') + 1);
     await update_p_job(user_id, p_job);
     await message.channel.send(p_job + ' 을(를) 직업으로 저장했습니다.');
+
     return;
 };
 
@@ -75,6 +78,7 @@ export const set_p_sex = async (message: Message<boolean>, user_id: string) => {
     const p_sex = message.content.substring(message.content.indexOf(' ') + 1);
     await update_p_sex(user_id, p_sex);
     await message.channel.send(p_sex + ' 을(를) 성별로 저장했습니다.');
+
     return;
 };
 
@@ -84,6 +88,7 @@ export const set_p_url = async (message: Message<boolean>, user_id: string) => {
     const p_url = message.content.substring(message.content.indexOf(' ') + 1);
     await update_p_url(user_id, p_url);
     await message.channel.send('사진 주소로 저장했습니다.');
+
     return;
 };
 
@@ -92,5 +97,6 @@ export const end_job_command = async (message: Message<boolean>) => {
 
     await message.channel.send('탐사자 정보 입력이 되었습니다. ``!탐사자 시트`` 명령어로 확인 후 ``!가이드`` 명령어로 계속 진행하세요');
     add_job.start = false;
+
     return;
 };
