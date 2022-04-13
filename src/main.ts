@@ -8,6 +8,7 @@ import {
     send_ability_guide, 
     send_backstroy_guide,
     send_manual_ability_guide,
+    kpc_guide,
 } from "./guide";
 import { 
     ability_stat,
@@ -66,8 +67,9 @@ client.on('message',async (message) => {
     }
 
     if(message.content.startsWith('!KPC')){
-        const command = message.content.substring(5);
-        await edit_user_ability(message, command); // !KPC 950231695163031603 근력 40  이렇게 입력 받으면 해당 유저의 탐사자 정보의 근력 값이 40으로 수정 된다        
+        await kpc_guide(message);  
+        await edit_user_ability(message); // !KPC 950231695163031603 근력 40  이렇게 입력 받으면 해당 유저의 탐사자 정보의 근력 값이 40으로 수정 된다
+        
     }
     
     if(message.content.startsWith('!가이드')){

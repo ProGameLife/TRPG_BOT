@@ -14,6 +14,7 @@ import {
     MAKE_ABILITY_GUIDE, 
     MAKE_SKILL_SET_GUIDE,
     MAKE_ABILITY_MANUAL_GUIDE,
+    KPC_GUIDE,
 } from "./message/message_format";
 import { 
     create_first_skill, 
@@ -51,6 +52,7 @@ export const send_main_guide =async (client: Client<boolean>) => {
 
 export const send_ability_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!특성치')) return;
+
     await message.channel.send(MAKE_ABILITY_GUIDE);
 
     return;
@@ -58,6 +60,7 @@ export const send_ability_guide = async (message: Message<boolean>) => {
 
 export const send_setup_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!가이드')) return;
+
     await message.channel.send(USER_ALL_GUIDE);
     
     return;
@@ -65,6 +68,7 @@ export const send_setup_guide = async (message: Message<boolean>) => {
 
 export const send_manual_ability_guide = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!특성치 입력')) return;
+
     ability_stat.start = true;
     create_first_ability(user_id);
     await message.channel.send(MAKE_ABILITY_MANUAL_GUIDE);
@@ -74,9 +78,10 @@ export const send_manual_ability_guide = async (message: Message<boolean>, user_
 
 export const send_skill_guide = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!기능')) return;
+
     if(await get_count_battle_status(user_id) === 0) await create_first_battle_status(user_id);
     if(await get_count_user_skill_list(user_id) === 0) await create_first_skill(user_id, await make_skill_point(user_id));
-    
+
     await message.channel.send(MAKE_SKILL_SET_GUIDE);
 
     return;
@@ -96,6 +101,7 @@ export const send_job_guide = async (message: Message<boolean>, user_id: string)
 
 export const send_backstroy_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!백스토리')) return;
+
     await message.channel.send(BACKSTORY_GUIDE);
 
     return;
@@ -103,7 +109,14 @@ export const send_backstroy_guide = async (message: Message<boolean>) => {
 
 export const send_equip_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!장비')) return;
+
     await message.channel.send(EQUIP_GUIDE);
 
     return;
 };
+
+export const kpc_guide = async (message: Message<boolean>) => {
+    if(!(message.content === '!KPC')) return;
+    
+    await message.channel.send(KPC_GUIDE);
+}

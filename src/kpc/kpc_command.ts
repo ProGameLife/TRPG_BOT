@@ -2,11 +2,14 @@ import { Message } from "discord.js";
 import { get_user_status } from "../sql/select";
 import { update_kpc_ability, update_kpc_dead, update_kpc_mad } from "../sql/update";
 
-export const edit_user_ability = async (message: Message<boolean>, kpc_command: string) => {
-    const command = kpc_command.split(' '); // user_id[0] 이성치[1] 45[2]
-    const user_id = command[0];
-    const ability = command[1].toUpperCase();
-    const stat = command[2];
+const number_regexp = /\d/;
+export const edit_user_ability = async (message: Message<boolean>) => {
+    const command = message.content.split(' '); // user_id[0] 이성치[1] 45[2]
+    const user_id = command[1];
+    if(!number_regexp.test(user_id)) return;
+
+    const ability = command[2].toUpperCase();
+    const stat = command[3];
     const pmc_status = await get_user_status(user_id);
     const user_name = pmc_status.flatMap((element) => {
         return element.p_name;
@@ -61,7 +64,7 @@ export const edit_user_ability = async (message: Message<boolean>, kpc_command: 
             scope = 14;
             break;
         case '':
-            
+            scope = 15;
             break;
     }
 
