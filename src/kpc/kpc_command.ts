@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
+import { delete_user_all } from "../sql/delete";
 import { get_user_status } from "../sql/select";
-import { update_kpc_ability, update_kpc_dead, update_kpc_mad } from "../sql/update";
+import { update_kpc_ability, update_kpc_dead, update_kpc_mad, update_skill_point } from "../sql/update";
 
 const number_regexp = /\d/;
 export const edit_user_ability = async (message: Message<boolean>) => {
@@ -8,16 +9,18 @@ export const edit_user_ability = async (message: Message<boolean>) => {
     const user_id = command[1];
     if(!number_regexp.test(user_id)) return;
 
-    const ability = command[2].toUpperCase();
+    const ab_flag = command[2].toUpperCase();
     const stat = command[3];
     const pmc_status = await get_user_status(user_id);
     const user_name = pmc_status.flatMap((element) => {
         return element.p_name;
     });
-    
-    let scope = 0;
+    if(user_name[0] === ''){
 
-    switch(ability){
+    }
+    let scope = 999;
+
+    switch(ab_flag){
         case '근력':
             scope = 0;
             break;
@@ -63,24 +66,35 @@ export const edit_user_ability = async (message: Message<boolean>) => {
         case '빈사':
             scope = 14;
             break;
-        case '':
+        case '정보삭제':
             scope = 15;
             break;
+        case '스킬포인트':
+            scope = 16;
+            break;
     }
+    if(scope === 999) return;
 
     if(scope < 13){
         await update_kpc_ability(user_id, Number(stat), scope);
-        await message.channel.send(user_name + ' 가 ' + ability +' 을(를) ' + stat + ' 으로 변경 하였씁니다.');
+        await message.channel.send(user_name + ' 가 ' + ab_flag +' 을(를) ' + stat + ' 으로 변경 하였습니다.');
     }
     if(scope === 13){
         await update_kpc_mad(user_id, stat);
-        await message.channel.send(user_name + ' 의 광기 상태가 ' + stat + ' 으로 변경 하였씁니다.');
+        await message.channel.send(user_name + ' 의 광기 상태가 ' + stat + ' 으로 변경 하였습니다.');
     }
     if(scope === 14){
         await update_kpc_dead(user_id, stat);
-        await message.channel.send(user_name + ' 의 상태가 ' + stat + ' 으로 변경 하였씁니다.');
+        await message.channel.send(user_name + ' 의 상태가 ' + stat + ' 으로 변경 하였습니다.');
     }
     if(scope === 15){
-        
+        await delete_user_all(user_id);
+        await message.channel.send(user_name + ' 의 정보가 모두 삭제되었습니다.');
     }
+    if(scope === 16){
+        await update_skill_point(user_id, Number(stat));
+        await message.channel.send(user_name + ' 의 스킬포인트가 ' + stat + ' 이 되었습니다.');
+    }
+
+    return;
 };

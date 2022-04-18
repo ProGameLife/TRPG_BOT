@@ -100,24 +100,6 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
     return;
 };
 
-export const show_user_skill_list = async (message: Message<boolean> , user_id: string) => {
-    if(!(message.content === '!기능확인')) return;
-    const show_skill_list = get_uses_skill_list(user_id);
-    const use_point = (await show_skill_list).flatMap((element) => {
-        return element.use_point;
-    });
-    const skill_name = (await show_skill_list).flatMap((element) => {
-        return element.skill_name ?? ' ';
-    });
-    const skill_stat = (await show_skill_list).flatMap((element) => {
-        return element.skill_stat ?? ' ';
-    });
-
-    await message.channel.send('사용한 포인트 : ' + use_point[0] + '\n기능 목록들 : ' + skill_name[0] + '\n기능 스탯들 : ' + skill_stat[0]);
-
-    return;
-};
-
 const make_uses_skill_data = async (user_id: string, skill_name: string, skill_stat: number, temp_point: number) => {
     let use_point = 0;
     let temp_skill_stat = '';

@@ -51,6 +51,7 @@ const client = new Client({
         Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
     ],
 });
+const test = ['!근력', '!건강', '!크기', '!민첩성', '!민첩', '!외모', '!지능', '!정신력', '!교육', '!운'];
 
 client.on('ready', async () => {
     console.log('TRPG WORLD ON');
@@ -60,69 +61,72 @@ client.on('ready', async () => {
 client.on('message',async (message) => {
     if(message.channel.type == 'DM' || message.author.bot) return;
     const user_id = message.member?.user.id ?? Math.floor(Math.random() * 999999999999999).toString();
+    try{
+        if(message.content === '!정리'){
+            message.delete();
+            await message.channel.bulkDelete(100);
+        }
 
-    if(message.content === '!정리'){
-        message.delete();
-        await message.channel.bulkDelete(100);
-    }
-
-    if(message.content.startsWith('!KPC')){
-        await kpc_guide(message);  
-        await edit_user_ability(message); // !KPC 950231695163031603 근력 40  이렇게 입력 받으면 해당 유저의 탐사자 정보의 근력 값이 40으로 수정 된다
+        if(message.content.startsWith('!KPC')){
+            await kpc_guide(message);  
+            await edit_user_ability(message); // !KPC 950231695163031603 근력 40  이렇게 입력 받으면 해당 유저의 탐사자 정보의 근력 값이 40으로 수정 된다
+            
+        }
         
-    }
-    
-    if(message.content.startsWith('!가이드')){
-        await send_setup_guide(message);
-    }
-    
-    if((message.content.startsWith('!특성치')) || ability_stat.start){
-        await send_ability_guide(message);
-        await delete_ability(message, user_id);
-        await set_auto_ability(message, user_id);
-        await set_manual_ability(message, user_id);
-        await clear_manual_ability(message, user_id);
-        await check_manual_ability(message, user_id);
-        await send_manual_ability_guide(message, user_id);
-    }
+        if(message.content.startsWith('!가이드')){
+            await send_setup_guide(message);
+        }
+        
+        if((message.content.startsWith('!특성치')) || ability_stat.start){
+            await send_ability_guide(message);
+            await delete_ability(message, user_id);
+            await set_auto_ability(message, user_id);
+            await set_manual_ability(message, user_id);
+            await clear_manual_ability(message, user_id);
+            await check_manual_ability(message, user_id);
+            await send_manual_ability_guide(message, user_id);
+        }
 
-    if((message.content.includes('기능'))){
-        await send_skill_guide(message, user_id);
-        await clear_user_skill(message, user_id);
-        await add_user_skill_list(message, user_id);
-        await show_user_skill_list(message, user_id);
-        await get_user_all_skill_list(message, user_id);
-        await end_user_skill(message);
-    }
+        if((message.content.includes('기능'))){
+            await send_skill_guide(message, user_id);
+            await clear_user_skill(message, user_id);
+            await add_user_skill_list(message, user_id);
+            await show_user_skill_list(message, user_id);
+            await get_user_all_skill_list(message, user_id);
+            await end_user_skill(message);
+        }
 
-    if(message.content.includes('dice')){
-        await set_dice(message);
-        await san_dice(message, user_id);
-    }
-    
-    if(message.content.startsWith('!탐사자')){
-        await view_user_sheet(message, user_id);
-    }
+        if(message.content.includes('dice')){
+            await set_dice(message);
+            await san_dice(message, user_id);
+        }
+        
+        if(message.content.startsWith('!탐사자')){
+            await view_user_sheet(message, user_id);
+        }
 
-    if(add_job.start || message.content.startsWith('!직업')){
-        await end_job_command(message);
-        await set_p_sex(message, user_id);
-        await set_p_age(message, user_id);
-        await set_p_url(message, user_id);
-        await set_p_job(message, user_id);
-        await set_p_name(message, user_id);
-        await send_job_guide(message, user_id);
-    }
+        if(add_job.start || message.content.startsWith('!직업')){
+            await end_job_command(message);
+            await set_p_sex(message, user_id);
+            await set_p_age(message, user_id);
+            await set_p_url(message, user_id);
+            await set_p_job(message, user_id);
+            await set_p_name(message, user_id);
+            await send_job_guide(message, user_id);
+        }
 
-    if(message.content.startsWith('!장비')){
-        await send_equip_guide(message);
-        await make_equip(message, user_id);
-        await clear_equip(message, user_id);
-    }
+        if(message.content.startsWith('!장비')){
+            await send_equip_guide(message);
+            await make_equip(message, user_id);
+            await clear_equip(message, user_id);
+        }
 
-    if(message.content.startsWith('!백스토리')){
-        await send_backstroy_guide(message);
-        await make_backstory(message, user_id);
+        if(message.content.startsWith('!백스토리')){
+            await send_backstroy_guide(message);
+            await make_backstory(message, user_id);
+        }
+    }catch(e){
+        console.log(e);
     }
 });
 

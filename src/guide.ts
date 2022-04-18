@@ -70,7 +70,7 @@ export const send_manual_ability_guide = async (message: Message<boolean>, user_
     if(!(message.content === '!특성치 입력')) return;
 
     ability_stat.start = true;
-    create_first_ability(user_id);
+    await create_first_ability(user_id);
     await message.channel.send(MAKE_ABILITY_MANUAL_GUIDE);
 
     return;

@@ -6,8 +6,8 @@ export const make_backstory = async (message: Message<boolean>, user_id: string)
     if(!(message.content.startsWith('!백스토리입력'))) return;
     let backstory = message.content.substring(message.content.indexOf(' ') + 1);
     backstory = backstory.replaceAll('.','\n');
-    update_user_backstory(user_id, backstory);
-    
+
+    await update_user_backstory(user_id, backstory);
     await message.channel.send('백스토리 입력이 되었습니다. ``!탐사자 시트``으로 내용 확인을 할 수 있습니다. ');
 };
 
