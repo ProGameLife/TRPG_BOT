@@ -15,9 +15,10 @@ export const set_dice = async (message: Message<boolean>) => {
     const pos2 = dice_command[0].indexOf('+') + 1 === 0 ? dice_command[0].length : dice_command[0].indexOf('+') + 1;
     
     const times = dice_command[0].substring(0, pos1 - 1);
-    const dice_number = dice_command[0].substring(pos1, pos2);
+    const dice_number = dice_command[0].substring(pos1, pos2 - 1);
     const extra_number = dice_command[0].substring(pos2, dice_command[0].length) === '' ? '0' : dice_command[0].substring(pos2, dice_command[0].length);
 
+    console.log(times, dice_number, extra_number);
     const result_dice = roll_dice(Number(times), Number(dice_number), Number(extra_number), result_dice_number, 0);
     await message.reply(dice_command[0] + ' 주사위 결과 : ' + result_dice.toString());
 

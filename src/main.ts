@@ -22,7 +22,6 @@ import {
     end_user_skill,
     clear_user_skill,
     add_user_skill_list,
-    show_user_skill_list,
     get_user_all_skill_list,
 } from "./skill";
 import {
@@ -37,7 +36,7 @@ import {
 import { create_room } from "./utill/utill";
 import { san_dice, set_dice } from "./dice";
 import { make_backstory } from "./backstory";
-import { view_user_sheet } from "./view/view";
+import { view_all_user_sheet, view_user_sheet } from "./view/view";
 import { clear_equip, make_equip } from "./equip";
 import { edit_user_ability } from "./kpc/kpc_command";
 import { Client, Intents, TextChannel } from "discord.js";
@@ -91,7 +90,6 @@ client.on('message',async (message) => {
             await send_skill_guide(message, user_id);
             await clear_user_skill(message, user_id);
             await add_user_skill_list(message, user_id);
-            await show_user_skill_list(message, user_id);
             await get_user_all_skill_list(message, user_id);
             await end_user_skill(message);
         }
@@ -103,6 +101,7 @@ client.on('message',async (message) => {
         
         if(message.content.startsWith('!탐사자')){
             await view_user_sheet(message, user_id);
+            await view_all_user_sheet(message);
         }
 
         if(add_job.start || message.content.startsWith('!직업')){

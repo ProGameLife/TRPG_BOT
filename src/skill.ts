@@ -1,10 +1,8 @@
-import { Message } from "discord.js";
 import { 
     get_skill_list, 
     get_skill_point,
     get_ability_idea, 
     get_uses_skill_list, 
-    get_count_uses_skill_list, 
 } from "./sql/select";
 import { 
     update_skill_point, 
@@ -12,41 +10,179 @@ import {
     update_reset_uses_skill,
 } from "./sql/update";
 import { upsert_uses_skill } from "./sql/upsert";
+import { Message, MessageEmbed } from "discord.js";
 
 export let skill_add = {
     start: false,
 };
 
+let default_skill_list = 
+    [
+        ['회계', '10'], ['인류학', '1'], ['고고학', '1'],
+        ['예술', '5'], ['천문학', '1'], ['흥정', '5'],
+        ['생물학', '1'], ['화학', '1'], ['등반', '40'],
+        ['컴퓨터', '1'], ['은닉', '15'], ['제작', '5'],
+        ['신용', '15'], ['크툴루신화', '0'], ['변장', '1'], 
+        ['회피', '0'], ['운전', '20'], ['전기수리', '10'],
+        ['전자공학', '1'], ['말주변', '5'], ['응급치료', '30'],
+        ['지질학', '1'], ['숨기', '10'], ['역사', '20'], 
+        ['도약', '25'], ['법률', '5'], ['자료조사', '25'],
+        ['듣기', '25'], ['자물쇠다루기', '1'], ['무술', '1'],
+        ['기계수리', '20'], ['의학', '5'], ['자연사', '10'], 
+        ['위치파악', '10'], ['신비학', '5'], ['중장비운전', '1'],
+        ['외국어', '1'], ['모국어', '0'], ['사진술', '10'],
+        ['물리학', '1'], ['조종', '1'], ['항공기조종', '0'],
+        ['선박조종', '0'], ['정신분석', '1'], ['심리학', '5'],
+        ['승마', '5'], ['잠행', '25'], ['수영', '25'],
+        ['던지기', '25'], ['추적', '10'], ['권총사격', '20'],
+        ['기관총사격', '15'], ['소총사격', '25'], ['산탄총사격', '30'],
+        ['기관단총', '15'], ['주먹질', '50'], ['붙잡기', '25'],
+        ['박치기', '10'], ['발차기', '25'], ['관찰력', '25'],
+        ['매혹', '15'], ['설득', '15'], ['수학', '10'],
+    ];
+
 export const get_user_all_skill_list = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!기능목록')) return;
+    const user_skill = await get_uses_skill_list(user_id);
+    const temp_skill_name = user_skill.flatMap((element) => {
+        return element.skill_name ?? '';
+    });
+    const temp_skill_stat = user_skill.flatMap((element) => {
+        return element.skill_stat ?? '';
+    });
 
     const skill_list_arr = await make_user_skill_list(user_id);
+    const skill_point = skill_list_arr[0];
+    if((temp_skill_name[0] === '')) temp_skill_name[0] = ' ';
+    const skill_name = temp_skill_name[0]?.split(',') ?? '';
+    const skill_stat = temp_skill_stat[0]?.split(',') ?? '';
+    
+    console.log(skill_name);
+    for(let i = 0; i < skill_name.length; i++){
+        for(let j = 0; j < default_skill_list.length; j++){
+            if(skill_name[i] === default_skill_list[j][0]){
+                default_skill_list[j][0] = '✨' + skill_name[i];
+                default_skill_list[j][1] = skill_stat[i];
+                break;
+            }
+        }
+    }
+
+    const send_embed =
+        [
+            default_skill_list[0][0] + '( ' + default_skill_list[0][1] + '% )\t' + default_skill_list[1][0] + '( ' + default_skill_list[1][1] + '% )\t' + default_skill_list[2][0] + '( ' + default_skill_list[2][1] + '% )',
+            default_skill_list[3][0] + '( ' + default_skill_list[3][1] + '% )\t' + default_skill_list[4][0] + '( ' + default_skill_list[4][1] + '% )\t' + default_skill_list[5][0] + '( ' + default_skill_list[5][1] + '% )',
+            default_skill_list[6][0] + '( ' + default_skill_list[6][1] + '% )\t' + default_skill_list[7][0] + '( ' + default_skill_list[7][1] + '% )\t' + default_skill_list[8][0] + '( ' + default_skill_list[8][1] + '% )',
+            default_skill_list[9][0] + '( ' + default_skill_list[9][1] + '% )\t' + default_skill_list[10][0] + '( ' + default_skill_list[10][1] + '% )\t' + default_skill_list[11][0] + '( ' + default_skill_list[11][1] + '% )',
+            default_skill_list[12][0] + '( ' + default_skill_list[12][1] + '% )\t' + default_skill_list[13][0] + '( ' + default_skill_list[13][1] + '% )\t' + default_skill_list[14][0] + '( ' + default_skill_list[14][1] + '% )',
+            default_skill_list[15][0] + '( ' + default_skill_list[15][1] + '% )\t' + default_skill_list[16][0] + '( ' + default_skill_list[16][1] + '% )\t' + default_skill_list[17][0] + '( ' + default_skill_list[17][1] + '% )',
+            default_skill_list[18][0] + '( ' + default_skill_list[18][1] + '% )\t' + default_skill_list[19][0] + '( ' + default_skill_list[19][1] + '% )\t' + default_skill_list[20][0] + '( ' + default_skill_list[20][1] + '% )',
+            default_skill_list[21][0] + '( ' + default_skill_list[21][1] + '% )\t' + default_skill_list[22][0] + '( ' + default_skill_list[22][1] + '% )\t' + default_skill_list[23][0] + '( ' + default_skill_list[23][1] + '% )',
+            default_skill_list[24][0] + '( ' + default_skill_list[24][1] + '% )\t' + default_skill_list[25][0] + '( ' + default_skill_list[25][1] + '% )\t' + default_skill_list[26][0] + '( ' + default_skill_list[26][1] + '% )',
+            default_skill_list[27][0] + '( ' + default_skill_list[27][1] + '% )\t' + default_skill_list[28][0] + '( ' + default_skill_list[28][1] + '% )\t' + default_skill_list[29][0] + '( ' + default_skill_list[29][1] + '% )',
+            default_skill_list[30][0] + '( ' + default_skill_list[30][1] + '% )\t' + default_skill_list[31][0] + '( ' + default_skill_list[31][1] + '% )\t' + default_skill_list[32][0] + '( ' + default_skill_list[32][1] + '% )',
+            default_skill_list[33][0] + '( ' + default_skill_list[33][1] + '% )\t' + default_skill_list[34][0] + '( ' + default_skill_list[34][1] + '% )\t' + default_skill_list[35][0] + '( ' + default_skill_list[35][1] + '% )',
+            default_skill_list[36][0] + '( ' + default_skill_list[36][1] + '% )\t' + default_skill_list[37][0] + '( ' + default_skill_list[37][1] + '% )\t' + default_skill_list[38][0] + '( ' + default_skill_list[38][1] + '% )',
+            default_skill_list[39][0] + '( ' + default_skill_list[39][1] + '% )\t' + default_skill_list[40][0] + '( ' + default_skill_list[40][1] + '% )\t' + default_skill_list[41][0] + '( ' + default_skill_list[41][1] + '% )',
+            default_skill_list[42][0] + '( ' + default_skill_list[42][1] + '% )\t' + default_skill_list[43][0] + '( ' + default_skill_list[43][1] + '% )\t' + default_skill_list[44][0] + '( ' + default_skill_list[44][1] + '% )',
+            default_skill_list[45][0] + '( ' + default_skill_list[45][1] + '% )\t' + default_skill_list[46][0] + '( ' + default_skill_list[46][1] + '% )\t' + default_skill_list[47][0] + '( ' + default_skill_list[47][1] + '% )',
+            default_skill_list[48][0] + '( ' + default_skill_list[48][1] + '% )\t' + default_skill_list[49][0] + '( ' + default_skill_list[49][1] + '% )\t' + default_skill_list[50][0] + '( ' + default_skill_list[50][1] + '% )',
+            default_skill_list[51][0] + '( ' + default_skill_list[51][1] + '% )\t' + default_skill_list[52][0] + '( ' + default_skill_list[52][1] + '% )\t' + default_skill_list[53][0] + '( ' + default_skill_list[53][1] + '% )',
+            default_skill_list[54][0] + '( ' + default_skill_list[54][1] + '% )\t' + default_skill_list[55][0] + '( ' + default_skill_list[55][1] + '% )\t' + default_skill_list[56][0] + '( ' + default_skill_list[56][1] + '% )',
+            default_skill_list[57][0] + '( ' + default_skill_list[57][1] + '% )\t' + default_skill_list[58][0] + '( ' + default_skill_list[58][1] + '% )\t' + default_skill_list[59][0] + '( ' + default_skill_list[59][1] + '% )',
+            default_skill_list[60][0] + '( ' + default_skill_list[60][1] + '% )\t' + default_skill_list[61][0] + '( ' + default_skill_list[61][1] + '% )\t' + default_skill_list[62][0] + '( ' + default_skill_list[62][1] + '% )',
+        ];
+
+    console.log(default_skill_list);
+
+    const embed = new MessageEmbed()
+    .setColor('#C171F5')
+    .addFields(
+        { name: '✨기능 목록' , value: 'ㅤ'},
+        { name: '잔여 스킬포인트 : ' + skill_point, value: 'ㅤ' },
+        { name: send_embed[0] , value: 'ㅤ'},
+        { name: send_embed[1] , value: 'ㅤ'},
+        { name: send_embed[2] , value: 'ㅤ'},
+        { name: send_embed[3] , value: 'ㅤ'},
+        { name: send_embed[4] , value: 'ㅤ'},
+        { name: send_embed[5] , value: 'ㅤ'},
+        { name: send_embed[6] , value: 'ㅤ'},
+        { name: send_embed[7] , value: 'ㅤ'},
+        { name: send_embed[8] , value: 'ㅤ'},
+        { name: send_embed[9] , value: 'ㅤ'},
+        { name: send_embed[10] , value: 'ㅤ'},
+        { name: send_embed[11] , value: 'ㅤ'},
+        { name: send_embed[12] , value: 'ㅤ'},
+        { name: send_embed[13] , value: 'ㅤ'},
+        { name: send_embed[14] , value: 'ㅤ'},
+        { name: send_embed[15] , value: 'ㅤ'},
+        { name: send_embed[16] , value: 'ㅤ'},
+        { name: send_embed[17] , value: 'ㅤ'},
+        { name: send_embed[18] , value: 'ㅤ'},
+        { name: send_embed[19] , value: 'ㅤ'},
+        { name: send_embed[20] , value: 'ㅤ'},
+    )
     await message.channel.sendTyping();
-    await message.channel.send(
-        '>>> **잔여 기능포인트 : ** '+ skill_list_arr[0] + '\n' +
-        '회계( ' + skill_list_arr[1] + '% )\t\t\t\t\t\t 인류학( ' + skill_list_arr[2] + '% )\t\t\t\t\t\t  고고학( ' + skill_list_arr[3] + '% )\n' +
-        '예술( ' + skill_list_arr[4] + '% )\t\t\t\t\t\t   천문학( ' + skill_list_arr[5] + '% )\t\t\t\t\t\t  흥정( ' + skill_list_arr[6] + '% )\n' +
-        '생물학( ' + skill_list_arr[7] + '% )\t\t\t\t\t\t화학( ' + skill_list_arr[8] + '% )\t\t\t\t\t\t\t  등반( ' + skill_list_arr[9] + '% )\n' +
-        '컴퓨터( ' + skill_list_arr[10] + '% )\t\t\t\t\t\t은닉( ' + skill_list_arr[11] + '% )\t\t\t\t\t\t\t제작( ' + skill_list_arr[12] + '% )\n' +
-        '신용( ' + skill_list_arr[13] + '% )\t\t\t\t\t\t 크툴루신화( ' + skill_list_arr[14] + '% )\t\t\t\t  변장( ' + skill_list_arr[15] + '% )\n' +
-        '회피( ' + skill_list_arr[16] + '% )\t\t\t\t\t\t  운전( ' + skill_list_arr[17] + '% )\t\t\t\t\t\t\t전기수리( ' + skill_list_arr[18] + '% )\n' +
-        '전자공학( ' + skill_list_arr[19] + '% )\t\t\t\t\t말주변( ' + skill_list_arr[20] + '% )\t\t\t\t\t\t  응급치료( ' + skill_list_arr[21] + '% )\n' +
-        '지질학( ' + skill_list_arr[22] + '% )\t\t\t\t\t\t숨기( ' + skill_list_arr[23] + '% )\t\t\t\t\t\t\t역사( ' + skill_list_arr[24] + '% )\n' +
-        '도약( ' + skill_list_arr[25] + '% )\t\t\t\t\t\t법률( ' + skill_list_arr[26] + '% )\t\t\t\t\t\t\t  자료조사( ' + skill_list_arr[27] + '% )\n' +
-        '듣기( ' + skill_list_arr[28] + '% )\t\t\t\t\t\t자물쇠다루기( ' + skill_list_arr[29] + '% )\t\t\t\t무술( ' + skill_list_arr[30] + '% )\n' +
-        '기계수리( ' + skill_list_arr[31] + '% )\t\t\t\t의학( ' + skill_list_arr[32] + '% )\t\t\t\t\t\t\t  자연사( ' + skill_list_arr[33] + '% )\n' +
-        '위치파악( ' + skill_list_arr[34] + '% )\t\t\t\t신비학( ' + skill_list_arr[35] + '% )\t\t\t\t\t\t   중장비운전( ' + skill_list_arr[36] + '% )\n' +
-        '외국어( ' + skill_list_arr[37] + '% )\t\t\t\t\t   모국어( ' + skill_list_arr[38] + '% )\t\t\t\t\t\t  사진술( ' + skill_list_arr[39] + '% )\n' +
-        '물리학( ' + skill_list_arr[40] + '% )\t\t\t\t\t   조종( ' + skill_list_arr[41] + '% )\t\t\t\t\t\t\t   항공기조종( ' + skill_list_arr[42] + '% )\n' +
-        '선박조종( ' + skill_list_arr[43] + '% )\t\t\t\t  정신분석( ' + skill_list_arr[44] + '% )\t\t\t\t\t   심리학( ' + skill_list_arr[45] + '% )\n' +
-        '승마( ' + skill_list_arr[46] + '% )\t\t\t\t\t\t  잠행( ' + skill_list_arr[47] + '% )\t\t\t\t\t\t\t수영( ' + skill_list_arr[48] + '% )\n' +
-        '던지기( ' + skill_list_arr[49] + '% )\t\t\t\t\t추적( ' + skill_list_arr[50] + '% )\t\t\t\t\t\t\t권총사격( ' + skill_list_arr[51] + '% )\n' +
-        '기관총사격( ' + skill_list_arr[52] + '% )\t\t\t 소총사격( ' + skill_list_arr[53] + '% )\t\t\t\t\t산탄총사격( ' + skill_list_arr[54] + '% )\n' +
-        '기관단총( ' + skill_list_arr[55] + '% )\t\t\t\t 주먹질( ' + skill_list_arr[56] + '% )\t\t\t\t\t\t붙잡기( ' + skill_list_arr[57] + '% )\n' +
-        '박치기( ' + skill_list_arr[58] + '% )\t\t\t\t\t 발차기( ' + skill_list_arr[59] + '% )\t\t\t\t\t\t관찰력( ' + skill_list_arr[60] + '% )\n' +
-        '매혹( ' + skill_list_arr[61] + '% )\t\t\t\t\t\t 설득( ' + skill_list_arr[62] + '% )\t\t\t\t\t\t\t수학( ' + skill_list_arr[63] + '% )\n'
-    );
+    await message.channel.send({embeds: [embed]});
+    
+    default_skill_list = 
+    [
+        ['회계', '10'], ['인류학', '1'], ['고고학', '1'],
+        ['예술', '5'], ['천문학', '1'], ['흥정', '5'],
+        ['생물학', '1'], ['화학', '1'], ['등반', '40'],
+        ['컴퓨터', '1'], ['은닉', '15'], ['제작', '5'],
+        ['신용', '15'], ['크툴루신화', '0'], ['변장', '1'], 
+        ['회피', '0'], ['운전', '20'], ['전기수리', '10'],
+        ['전자공학', '1'], ['말주변', '5'], ['응급치료', '30'],
+        ['지질학', '1'], ['숨기', '10'], ['역사', '20'], 
+        ['도약', '25'], ['법률', '5'], ['자료조사', '25'],
+        ['듣기', '25'], ['자물쇠다루기', '1'], ['무술', '1'],
+        ['기계수리', '20'], ['의학', '5'], ['자연사', '10'], 
+        ['위치파악', '10'], ['신비학', '5'], ['중장비운전', '1'],
+        ['외국어', '1'], ['모국어', '0'], ['사진술', '10'],
+        ['물리학', '1'], ['조종', '1'], ['항공기조종', '0'],
+        ['선박조종', '0'], ['정신분석', '1'], ['심리학', '5'],
+        ['승마', '5'], ['잠행', '25'], ['수영', '25'],
+        ['던지기', '25'], ['추적', '10'], ['권총사격', '20'],
+        ['기관총사격', '15'], ['소총사격', '25'], ['산탄총사격', '30'],
+        ['기관단총', '15'], ['주먹질', '50'], ['붙잡기', '25'],
+        ['박치기', '10'], ['발차기', '25'], ['관찰력', '25'],
+        ['매혹', '15'], ['설득', '15'], ['수학', '10'],
+    ];
+
+    return;
 };
+
+// export const get_user_all_skill_list = async (message: Message<boolean>, user_id: string) => {
+//     if(!(message.content === '!기능목록')) return;
+
+//     const skill_list_arr = await make_user_skill_list(user_id);
+//     await message.channel.sendTyping();
+//     await message.channel.send(
+//         '>>> **잔여 기능포인트 : ** '+ skill_list_arr[0] + '\n' +
+//         '회계( ' + skill_list_arr[1] + '% )\t\t\t\t\t\t 인류학( ' + skill_list_arr[2] + '% )\t\t\t\t\t\t  고고학( ' + skill_list_arr[3] + '% )\n' +
+//         '예술( ' + skill_list_arr[4] + '% )\t\t\t\t\t\t   천문학( ' + skill_list_arr[5] + '% )\t\t\t\t\t\t  흥정( ' + skill_list_arr[6] + '% )\n' +
+//         '생물학( ' + skill_list_arr[7] + '% )\t\t\t\t\t\t화학( ' + skill_list_arr[8] + '% )\t\t\t\t\t\t\t  등반( ' + skill_list_arr[9] + '% )\n' +
+//         '컴퓨터( ' + skill_list_arr[10] + '% )\t\t\t\t\t\t은닉( ' + skill_list_arr[11] + '% )\t\t\t\t\t\t\t제작( ' + skill_list_arr[12] + '% )\n' +
+//         '신용( ' + skill_list_arr[13] + '% )\t\t\t\t\t\t 크툴루신화( ' + skill_list_arr[14] + '% )\t\t\t\t  변장( ' + skill_list_arr[15] + '% )\n' +
+//         '회피( ' + skill_list_arr[16] + '% )\t\t\t\t\t\t  운전( ' + skill_list_arr[17] + '% )\t\t\t\t\t\t\t전기수리( ' + skill_list_arr[18] + '% )\n' +
+//         '전자공학( ' + skill_list_arr[19] + '% )\t\t\t\t\t말주변( ' + skill_list_arr[20] + '% )\t\t\t\t\t\t  응급치료( ' + skill_list_arr[21] + '% )\n' +
+//         '지질학( ' + skill_list_arr[22] + '% )\t\t\t\t\t\t숨기( ' + skill_list_arr[23] + '% )\t\t\t\t\t\t\t역사( ' + skill_list_arr[24] + '% )\n' +
+//         '도약( ' + skill_list_arr[25] + '% )\t\t\t\t\t\t법률( ' + skill_list_arr[26] + '% )\t\t\t\t\t\t\t  자료조사( ' + skill_list_arr[27] + '% )\n' +
+//         '듣기( ' + skill_list_arr[28] + '% )\t\t\t\t\t\t자물쇠다루기( ' + skill_list_arr[29] + '% )\t\t\t\t무술( ' + skill_list_arr[30] + '% )\n' +
+//         '기계수리( ' + skill_list_arr[31] + '% )\t\t\t\t의학( ' + skill_list_arr[32] + '% )\t\t\t\t\t\t\t  자연사( ' + skill_list_arr[33] + '% )\n' +
+//         '위치파악( ' + skill_list_arr[34] + '% )\t\t\t\t신비학( ' + skill_list_arr[35] + '% )\t\t\t\t\t\t   중장비운전( ' + skill_list_arr[36] + '% )\n' +
+//         '외국어( ' + skill_list_arr[37] + '% )\t\t\t\t\t   모국어( ' + skill_list_arr[38] + '% )\t\t\t\t\t\t  사진술( ' + skill_list_arr[39] + '% )\n' +
+//         '물리학( ' + skill_list_arr[40] + '% )\t\t\t\t\t   조종( ' + skill_list_arr[41] + '% )\t\t\t\t\t\t\t   항공기조종( ' + skill_list_arr[42] + '% )\n' +
+//         '선박조종( ' + skill_list_arr[43] + '% )\t\t\t\t  정신분석( ' + skill_list_arr[44] + '% )\t\t\t\t\t   심리학( ' + skill_list_arr[45] + '% )\n' +
+//         '승마( ' + skill_list_arr[46] + '% )\t\t\t\t\t\t  잠행( ' + skill_list_arr[47] + '% )\t\t\t\t\t\t\t수영( ' + skill_list_arr[48] + '% )\n' +
+//         '던지기( ' + skill_list_arr[49] + '% )\t\t\t\t\t추적( ' + skill_list_arr[50] + '% )\t\t\t\t\t\t\t권총사격( ' + skill_list_arr[51] + '% )\n' +
+//         '기관총사격( ' + skill_list_arr[52] + '% )\t\t\t 소총사격( ' + skill_list_arr[53] + '% )\t\t\t\t\t산탄총사격( ' + skill_list_arr[54] + '% )\n' +
+//         '기관단총( ' + skill_list_arr[55] + '% )\t\t\t\t 주먹질( ' + skill_list_arr[56] + '% )\t\t\t\t\t\t붙잡기( ' + skill_list_arr[57] + '% )\n' +
+//         '박치기( ' + skill_list_arr[58] + '% )\t\t\t\t\t 발차기( ' + skill_list_arr[59] + '% )\t\t\t\t\t\t관찰력( ' + skill_list_arr[60] + '% )\n' +
+//         '매혹( ' + skill_list_arr[61] + '% )\t\t\t\t\t\t 설득( ' + skill_list_arr[62] + '% )\t\t\t\t\t\t\t수학( ' + skill_list_arr[63] + '% )\n'
+//     );
+// };
 
 export const add_user_skill_list = async (message: Message<boolean> , user_id: string) => {
     if(!(message.content.startsWith('!기능추가'))) return;

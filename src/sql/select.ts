@@ -17,6 +17,20 @@ export const get_ability = async (user_id: string) => {
     return get_ability;
 };
 
+export const get_all_user_id = async () => {
+    const get_all_user_id = await prisma.ability.findMany({
+        select: {
+            user_id: true,
+        },
+    });
+
+    const user_id_list = get_all_user_id.flatMap((element) => {
+        return element.user_id;
+    })
+
+    return user_id_list;
+}
+
 export const get_ability_idea = async (user_id: string) => {
     const get_ability_idea = await prisma.ability.findMany({
         select: {
@@ -65,7 +79,7 @@ export const get_all_ability = async (user_id: string) => {
         },
         where: { user_id: user_id },
     });
-    
+
     return get_all_ability;
 };
 

@@ -3,13 +3,15 @@ import { view_user_status } from "../job";
 import { view_backstory } from "../backstory";
 import { get_ability_status } from "../ability";
 import { view_uses_skill_list } from "../skill";
-import { get_battle_status } from "../sql/select";
+import { get_all_user_id, get_battle_status } from "../sql/select";
 import { Message, MessageEmbed, } from "discord.js";
+
+const NULL_VALUE = '-';
 
 export const view_user_sheet = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content === '!탐사자 시트')) return;
 
-    const NULL_VALUE = '-';
+    
     const equip = await view_equip(user_id) ?? NULL_VALUE;
     const backstory = await view_backstory(user_id) ?? NULL_VALUE;
     const view_user = await view_user_status(user_id);
@@ -90,6 +92,43 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
     await message.channel.sendTyping();
     await message.channel.send({ embeds: [embed2]});
     
+    return;
+};
+
+export const view_all_user_sheet = async(message: Message<boolean>) => {
+    if(!(message.content === '!탐사자 시트 요약')) return;
+
+    const user_id_list = await get_all_user_id();
+
+    for(let i = 0; i < user_id_list.length; i++){
+        const view_user = await view_user_status(user_id_list[i]);
+        const view_ability = await get_ability_status(user_id_list[i]);
+        const battle_status = await view_battle_status(user_id_list[i]);
+        const equip = await view_equip(user_id_list[i]) ?? NULL_VALUE;
+
+        const embed = new MessageEmbed()
+            .setColor('#C171F5')
+            .setTitle('👤 탐사자 시트')
+            .setThumbnail(view_user.url ?? 'https://png.clipart.me/istock/previews/9349/93493545-people-icon.jpg')
+            .addFields(
+                { name: '이름', value: view_user.name ?? NULL_VALUE},
+                { name: '플레이어', value: '<@' + user_id_list[i] + '>' },
+                { name: '직업', value: view_user.job ?? NULL_VALUE, inline: true},
+                { name: '나이', value: String(view_user.age ?? NULL_VALUE) , inline: true }, 
+                { name: '성별', value: view_user.sex ?? NULL_VALUE, inline: true},
+                { name: 'ㅤ', value: '**🛠특수 특성치**', inline: false },
+                { name: '🦶🏻이동력', value: String(view_ability[9] ?? NULL_VALUE) , inline: true },
+                { name: '🩸HP', value: String(view_ability[10] ?? NULL_VALUE) , inline: true },
+                { name: '🔷MP', value: String(view_ability[11] ?? NULL_VALUE) , inline: true },
+                { name: '👽이성치', value: String(view_ability[12] ?? NULL_VALUE) , inline: true },
+                { name: '🤪광기(일시적,장기적)', value: battle_status[0] ?? NULL_VALUE, inline: true },
+                { name: 'ㅤ', value: '**🛡장비목록**\n' + equip, inline: false },
+            )
+
+        await message.channel.sendTyping();
+        await message.channel.send({ embeds: [embed]});
+    }
+
     return;
 };
 
