@@ -102,7 +102,7 @@ model skill_uses {
 model user_status {
   user_id    String @id @db.VarChar(64)
   p_name     String @default("") @db.VarChar(16)
-  p_age      Int    @default(0)
+  p_age      String @default(dbgenerated("0")) @db.VarChar(16)
   p_sex      String @default("") @db.VarChar(8)
   p_job      String @default("") @db.VarChar(16)
   image_link String @default("https://png.clipart.me/istock/previews/9349/93493545-people-icon.jpg") @db.VarChar(256)

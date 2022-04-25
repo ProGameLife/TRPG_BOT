@@ -167,7 +167,7 @@ export const update_p_name = async (user_id: string, p_name: string) => { // 아
     return;
 };
 
-export const update_p_age = async (user_id: string, p_age: number) => { // 나이
+export const update_p_age = async (user_id: string, p_age: string) => { // 나이
     await prisma.user_status.update({
         where: { user_id: user_id },
         data: {

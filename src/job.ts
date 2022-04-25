@@ -56,7 +56,7 @@ export const set_p_age = async (message: Message<boolean>, user_id: string) => {
     if(!(message.content.startsWith('!나이설정'))) return;
     
     const p_age = message.content.substring(message.content.indexOf(' ') + 1);
-    await update_p_age(user_id, Number(p_age));
+    await update_p_age(user_id, p_age);
     await message.channel.send(p_age + ' 을(를) 나이로 저장했습니다.');
 
     return;
