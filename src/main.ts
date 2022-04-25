@@ -34,7 +34,10 @@ import {
     end_job_command,
 } from "./job";
 import { create_room } from "./utill/utill";
-import { san_dice, set_dice } from "./dice";
+import { 
+    san_dice, 
+    set_dice,
+} from "./dice";
 import { make_backstory } from "./backstory";
 import { view_all_user_sheet, view_user_sheet } from "./view/view";
 import { clear_equip, make_equip } from "./equip";

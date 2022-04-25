@@ -1,9 +1,15 @@
 import { Message } from "discord.js";
 import { delete_user_all } from "../sql/delete";
 import { get_user_status } from "../sql/select";
-import { update_kpc_ability, update_kpc_dead, update_kpc_mad, update_skill_point } from "../sql/update";
+import { number_regexp } from "../utill/regexp";
+import { 
+    update_kpc_mad, 
+    update_kpc_dead, 
+    update_kpc_ability, 
+    update_skill_point,
+} from "../sql/update";
 
-const number_regexp = /\d/;
+
 export const edit_user_ability = async (message: Message<boolean>) => {
     const command = message.content.split(' '); // user_id[0] 이성치[1] 45[2]
     const user_id = command[1];
