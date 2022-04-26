@@ -1,13 +1,18 @@
-import { Message } from "discord.js";
-import { delete_user_all } from "../sql/delete";
-import { get_user_status } from "../sql/select";
-import { number_regexp } from "../utill/regexp";
 import { 
     update_kpc_mad, 
     update_kpc_dead, 
     update_kpc_ability, 
     update_skill_point,
 } from "../sql/update";
+import { 
+    get_all_ability, 
+    get_user_status, 
+    get_battle_status, 
+    get_uses_skill_list 
+} from "../sql/select";
+import { Message } from "discord.js";
+import { number_regexp } from "../utill/regexp";
+import { delete_user_all } from "../sql/delete";
 
 
 export const edit_user_ability = async (message: Message<boolean>) => {
@@ -21,9 +26,7 @@ export const edit_user_ability = async (message: Message<boolean>) => {
     const user_name = pmc_status.flatMap((element) => {
         return element.p_name;
     });
-    if(user_name[0] === ''){
-
-    }
+    
     let scope = 999;
 
     switch(ab_flag){
@@ -78,6 +81,9 @@ export const edit_user_ability = async (message: Message<boolean>) => {
         case '스킬포인트':
             scope = 16;
             break;
+        case '탐사자':
+            scope = 17;
+            break;
     }
     if(scope === 999) return;
 
@@ -100,6 +106,9 @@ export const edit_user_ability = async (message: Message<boolean>) => {
     if(scope === 16){
         await update_skill_point(user_id, Number(stat));
         await message.channel.send(user_name + ' 의 스킬포인트가 ' + stat + ' 이 되었습니다.');
+    }
+    if(scope === 17){
+       
     }
 
     return;

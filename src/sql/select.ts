@@ -142,6 +142,8 @@ export const get_user_status = async (user_id: string) => {
             p_job: true,
             p_age: true,
             image_link: true,
+            back_story: true,
+            equip: true,
         },
         where: { user_id: user_id },
     });
@@ -194,6 +196,8 @@ export const get_count_battle_status = async (user_id: string) => {
 export const get_battle_status = async (user_id: string) => {
     const user_battle_status = await prisma.battle_status.findMany({
         select: {
+            physique: true,
+            bonus_attack: true,
             long_mad: true,
             dead: true,
         },

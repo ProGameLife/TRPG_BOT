@@ -33,11 +33,12 @@ import {
     set_p_name,
     end_job_command,
 } from "./job";
-import { create_room } from "./utill/utill";
 import { 
     san_dice, 
     set_dice,
 } from "./dice";
+import { user_backup } from "./user_backup";
+import { create_room } from "./utill/utill";
 import { make_backstory } from "./backstory";
 import { view_all_user_sheet, view_user_sheet } from "./view/view";
 import { clear_equip, make_equip } from "./equip";
@@ -105,6 +106,10 @@ client.on('message',async (message) => {
         if(message.content.startsWith('!탐사자')){
             await view_user_sheet(message, user_id);
             await view_all_user_sheet(message);
+        }
+
+        if(message.content.startsWith('!템플릿')){
+            await user_backup(message);
         }
 
         if(add_job.start || message.content.startsWith('!직업')){
