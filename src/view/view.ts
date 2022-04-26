@@ -114,7 +114,7 @@ export const view_all_user_sheet = async(message: Message<boolean>) => {
                 { name: '이름', value: view_user.name ?? NULL_VALUE},
                 { name: '플레이어', value: '<@' + user_id_list[i] + '>' },
                 { name: '직업', value: view_user.job ?? NULL_VALUE, inline: true},
-                { name: '나이', value: String(view_user.age ?? NULL_VALUE) , inline: true }, 
+                { name: '나이', value: view_user.age ?? NULL_VALUE , inline: true }, 
                 { name: '성별', value: view_user.sex ?? NULL_VALUE, inline: true},
                 { name: 'ㅤ', value: '**🛠특수 특성치**', inline: false },
                 { name: '🦶🏻이동력', value: String(view_ability[9] ?? NULL_VALUE) , inline: true },

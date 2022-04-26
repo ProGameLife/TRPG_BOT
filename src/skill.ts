@@ -18,27 +18,27 @@ export let skill_add = {
 
 let default_skill_list = 
     [
-        ['회계', '10'], ['인류학', '1'], ['고고학', '1'],
-        ['예술', '5'], ['천문학', '1'], ['흥정', '5'],
-        ['생물학', '1'], ['화학', '1'], ['등반', '40'],
-        ['컴퓨터', '1'], ['은닉', '15'], ['제작', '5'],
-        ['신용', '15'], ['크툴루신화', '0'], ['변장', '1'], 
-        ['회피', '0'], ['운전', '20'], ['전기수리', '10'],
-        ['전자공학', '1'], ['말주변', '5'], ['응급치료', '30'],
-        ['지질학', '1'], ['숨기', '10'], ['역사', '20'], 
-        ['도약', '25'], ['법률', '5'], ['자료조사', '25'],
-        ['듣기', '25'], ['자물쇠다루기', '1'], ['무술', '1'],
-        ['기계수리', '20'], ['의학', '5'], ['자연사', '10'], 
-        ['위치파악', '10'], ['신비학', '5'], ['중장비운전', '1'],
-        ['외국어', '1'], ['모국어', '0'], ['사진술', '10'],
-        ['물리학', '1'], ['조종', '1'], ['항공기조종', '0'],
-        ['선박조종', '0'], ['정신분석', '1'], ['심리학', '5'],
-        ['승마', '5'], ['잠행', '25'], ['수영', '25'],
-        ['던지기', '25'], ['추적', '10'], ['권총사격', '20'],
-        ['기관총사격', '15'], ['소총사격', '25'], ['산탄총사격', '30'],
-        ['기관단총', '15'], ['주먹질', '50'], ['붙잡기', '25'],
-        ['박치기', '10'], ['발차기', '25'], ['관찰력', '25'],
-        ['매혹', '15'], ['설득', '15'], ['수학', '10'],
+        ['고고학', '1'], ['관찰력', '25'], ['권총사격', '20'], 
+        ['기계수리', '20'], ['기관단총', '15'], ['기관총사격', '15'],
+        ['던지기', '25'], ['도약', '25'], ['듣기', '25'], 
+        ['등반', '40'], ['말주변', '5'], ['매혹', '15'], 
+        ['모국어', '0'], ['무술', '1'], ['물리학', '1'], 
+        ['박치기', '10'], ['발차기', '25'], ['법률', '5'],
+        ['변장', '1'], ['붙잡기', '25'], ['사진술', '10'],
+        ['산탄총사격', '30'], ['설득', '15'], ['선박조종', '0'], 
+        ['생물학', '1'], ['소총사격', '25'], ['수영', '25'], 
+        ['수학', '10'], ['숨기', '10'], ['승마', '5'],  
+        ['신용', '15'], ['신비학', '5'], ['심리학', '5'],
+        ['역사', '20'], ['예술', '5'], ['운전', '20'], 
+        ['은닉', '15'],['응급치료', '30'], ['외국어', '1'], 
+        ['의학', '5'], ['인류학', '1'], ['위치파악', '10'], 
+        ['자료조사', '25'], ['자연사', '10'], ['자물쇠다루기', '1'], 
+        ['잠행', '25'], ['정신분석', '1'], ['전기수리', '10'], 
+        ['전자공학', '1'], ['제작', '5'], ['조종', '1'], 
+        ['주먹질', '50'], ['중장비운전', '1'], ['지질학', '1'], 
+        ['천문학', '1'], ['추적', '10'],  ['컴퓨터', '1'],
+        ['크툴루신화', '0'], ['항공기조종', '0'], ['화학', '1'],
+        ['회피', '0'],  ['회계', '10'], ['흥정', '5'],
     ];
 
 export const get_user_all_skill_list = async (message: Message<boolean>, user_id: string) => {
@@ -56,8 +56,7 @@ export const get_user_all_skill_list = async (message: Message<boolean>, user_id
     if((temp_skill_name[0] === '')) temp_skill_name[0] = ' ';
     const skill_name = temp_skill_name[0]?.split(',') ?? '';
     const skill_stat = temp_skill_stat[0]?.split(',') ?? '';
-    
-    console.log(skill_name);
+
     for(let i = 0; i < skill_name.length; i++){
         for(let j = 0; j < default_skill_list.length; j++){
             if(skill_name[i] === default_skill_list[j][0]){
@@ -93,8 +92,6 @@ export const get_user_all_skill_list = async (message: Message<boolean>, user_id
             default_skill_list[60][0] + '( ' + default_skill_list[60][1] + '% )\t' + default_skill_list[61][0] + '( ' + default_skill_list[61][1] + '% )\t' + default_skill_list[62][0] + '( ' + default_skill_list[62][1] + '% )',
         ];
 
-    console.log(default_skill_list);
-
     const embed = new MessageEmbed()
     .setColor('#C171F5')
     .addFields(
@@ -127,62 +124,31 @@ export const get_user_all_skill_list = async (message: Message<boolean>, user_id
     
     default_skill_list = 
     [
-        ['회계', '10'], ['인류학', '1'], ['고고학', '1'],
-        ['예술', '5'], ['천문학', '1'], ['흥정', '5'],
-        ['생물학', '1'], ['화학', '1'], ['등반', '40'],
-        ['컴퓨터', '1'], ['은닉', '15'], ['제작', '5'],
-        ['신용', '15'], ['크툴루신화', '0'], ['변장', '1'], 
-        ['회피', '0'], ['운전', '20'], ['전기수리', '10'],
-        ['전자공학', '1'], ['말주변', '5'], ['응급치료', '30'],
-        ['지질학', '1'], ['숨기', '10'], ['역사', '20'], 
-        ['도약', '25'], ['법률', '5'], ['자료조사', '25'],
-        ['듣기', '25'], ['자물쇠다루기', '1'], ['무술', '1'],
-        ['기계수리', '20'], ['의학', '5'], ['자연사', '10'], 
-        ['위치파악', '10'], ['신비학', '5'], ['중장비운전', '1'],
-        ['외국어', '1'], ['모국어', '0'], ['사진술', '10'],
-        ['물리학', '1'], ['조종', '1'], ['항공기조종', '0'],
-        ['선박조종', '0'], ['정신분석', '1'], ['심리학', '5'],
-        ['승마', '5'], ['잠행', '25'], ['수영', '25'],
-        ['던지기', '25'], ['추적', '10'], ['권총사격', '20'],
-        ['기관총사격', '15'], ['소총사격', '25'], ['산탄총사격', '30'],
-        ['기관단총', '15'], ['주먹질', '50'], ['붙잡기', '25'],
-        ['박치기', '10'], ['발차기', '25'], ['관찰력', '25'],
-        ['매혹', '15'], ['설득', '15'], ['수학', '10'],
+        ['고고학', '1'], ['관찰력', '25'], ['권총사격', '20'], 
+        ['기계수리', '20'], ['기관단총', '15'], ['기관총사격', '15'],
+        ['던지기', '25'], ['도약', '25'], ['듣기', '25'], 
+        ['등반', '40'], ['말주변', '5'], ['매혹', '15'], 
+        ['모국어', '0'], ['무술', '1'], ['물리학', '1'], 
+        ['박치기', '10'], ['발차기', '25'], ['법률', '5'],
+        ['변장', '1'], ['붙잡기', '25'], ['사진술', '10'],
+        ['산탄총사격', '30'], ['설득', '15'], ['선박조종', '0'], 
+        ['생물학', '1'], ['소총사격', '25'], ['수영', '25'], 
+        ['수학', '10'], ['숨기', '10'], ['승마', '5'],  
+        ['신용', '15'], ['신비학', '5'], ['심리학', '5'],
+        ['역사', '20'], ['예술', '5'], ['운전', '20'], 
+        ['은닉', '15'],['응급치료', '30'], ['외국어', '1'], 
+        ['의학', '5'], ['인류학', '1'], ['위치파악', '10'], 
+        ['자료조사', '25'], ['자연사', '10'], ['자물쇠다루기', '1'], 
+        ['잠행', '25'], ['정신분석', '1'], ['전기수리', '10'], 
+        ['전자공학', '1'], ['제작', '5'], ['조종', '1'], 
+        ['주먹질', '50'], ['중장비운전', '1'], ['지질학', '1'], 
+        ['천문학', '1'], ['추적', '10'],  ['컴퓨터', '1'],
+        ['크툴루신화', '0'], ['항공기조종', '0'], ['화학', '1'],
+        ['회피', '0'],  ['회계', '10'], ['흥정', '5'],
     ];
 
     return;
 };
-
-// export const get_user_all_skill_list = async (message: Message<boolean>, user_id: string) => {
-//     if(!(message.content === '!기능목록')) return;
-
-//     const skill_list_arr = await make_user_skill_list(user_id);
-//     await message.channel.sendTyping();
-//     await message.channel.send(
-//         '>>> **잔여 기능포인트 : ** '+ skill_list_arr[0] + '\n' +
-//         '회계( ' + skill_list_arr[1] + '% )\t\t\t\t\t\t 인류학( ' + skill_list_arr[2] + '% )\t\t\t\t\t\t  고고학( ' + skill_list_arr[3] + '% )\n' +
-//         '예술( ' + skill_list_arr[4] + '% )\t\t\t\t\t\t   천문학( ' + skill_list_arr[5] + '% )\t\t\t\t\t\t  흥정( ' + skill_list_arr[6] + '% )\n' +
-//         '생물학( ' + skill_list_arr[7] + '% )\t\t\t\t\t\t화학( ' + skill_list_arr[8] + '% )\t\t\t\t\t\t\t  등반( ' + skill_list_arr[9] + '% )\n' +
-//         '컴퓨터( ' + skill_list_arr[10] + '% )\t\t\t\t\t\t은닉( ' + skill_list_arr[11] + '% )\t\t\t\t\t\t\t제작( ' + skill_list_arr[12] + '% )\n' +
-//         '신용( ' + skill_list_arr[13] + '% )\t\t\t\t\t\t 크툴루신화( ' + skill_list_arr[14] + '% )\t\t\t\t  변장( ' + skill_list_arr[15] + '% )\n' +
-//         '회피( ' + skill_list_arr[16] + '% )\t\t\t\t\t\t  운전( ' + skill_list_arr[17] + '% )\t\t\t\t\t\t\t전기수리( ' + skill_list_arr[18] + '% )\n' +
-//         '전자공학( ' + skill_list_arr[19] + '% )\t\t\t\t\t말주변( ' + skill_list_arr[20] + '% )\t\t\t\t\t\t  응급치료( ' + skill_list_arr[21] + '% )\n' +
-//         '지질학( ' + skill_list_arr[22] + '% )\t\t\t\t\t\t숨기( ' + skill_list_arr[23] + '% )\t\t\t\t\t\t\t역사( ' + skill_list_arr[24] + '% )\n' +
-//         '도약( ' + skill_list_arr[25] + '% )\t\t\t\t\t\t법률( ' + skill_list_arr[26] + '% )\t\t\t\t\t\t\t  자료조사( ' + skill_list_arr[27] + '% )\n' +
-//         '듣기( ' + skill_list_arr[28] + '% )\t\t\t\t\t\t자물쇠다루기( ' + skill_list_arr[29] + '% )\t\t\t\t무술( ' + skill_list_arr[30] + '% )\n' +
-//         '기계수리( ' + skill_list_arr[31] + '% )\t\t\t\t의학( ' + skill_list_arr[32] + '% )\t\t\t\t\t\t\t  자연사( ' + skill_list_arr[33] + '% )\n' +
-//         '위치파악( ' + skill_list_arr[34] + '% )\t\t\t\t신비학( ' + skill_list_arr[35] + '% )\t\t\t\t\t\t   중장비운전( ' + skill_list_arr[36] + '% )\n' +
-//         '외국어( ' + skill_list_arr[37] + '% )\t\t\t\t\t   모국어( ' + skill_list_arr[38] + '% )\t\t\t\t\t\t  사진술( ' + skill_list_arr[39] + '% )\n' +
-//         '물리학( ' + skill_list_arr[40] + '% )\t\t\t\t\t   조종( ' + skill_list_arr[41] + '% )\t\t\t\t\t\t\t   항공기조종( ' + skill_list_arr[42] + '% )\n' +
-//         '선박조종( ' + skill_list_arr[43] + '% )\t\t\t\t  정신분석( ' + skill_list_arr[44] + '% )\t\t\t\t\t   심리학( ' + skill_list_arr[45] + '% )\n' +
-//         '승마( ' + skill_list_arr[46] + '% )\t\t\t\t\t\t  잠행( ' + skill_list_arr[47] + '% )\t\t\t\t\t\t\t수영( ' + skill_list_arr[48] + '% )\n' +
-//         '던지기( ' + skill_list_arr[49] + '% )\t\t\t\t\t추적( ' + skill_list_arr[50] + '% )\t\t\t\t\t\t\t권총사격( ' + skill_list_arr[51] + '% )\n' +
-//         '기관총사격( ' + skill_list_arr[52] + '% )\t\t\t 소총사격( ' + skill_list_arr[53] + '% )\t\t\t\t\t산탄총사격( ' + skill_list_arr[54] + '% )\n' +
-//         '기관단총( ' + skill_list_arr[55] + '% )\t\t\t\t 주먹질( ' + skill_list_arr[56] + '% )\t\t\t\t\t\t붙잡기( ' + skill_list_arr[57] + '% )\n' +
-//         '박치기( ' + skill_list_arr[58] + '% )\t\t\t\t\t 발차기( ' + skill_list_arr[59] + '% )\t\t\t\t\t\t관찰력( ' + skill_list_arr[60] + '% )\n' +
-//         '매혹( ' + skill_list_arr[61] + '% )\t\t\t\t\t\t 설득( ' + skill_list_arr[62] + '% )\t\t\t\t\t\t\t수학( ' + skill_list_arr[63] + '% )\n'
-//     );
-// };
 
 export const add_user_skill_list = async (message: Message<boolean> , user_id: string) => {
     if(!(message.content.startsWith('!기능추가'))) return;
@@ -190,6 +156,7 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
     const add_skill_command = message.content.split(' ');
     let skill_name = add_skill_command[1]; // 관찰력
     let skill_stat = Number(add_skill_command[2]); // 45 기존 기능 값에 + 해서 입력해야함
+    let default_stat = 0;
     const temp_stat = skill_stat;
 
     const skill_point = await get_skill_point(user_id);
@@ -200,43 +167,43 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
 
     switch(true){
         case ['등반'].includes(skill_name):
-            skill_stat += 40;
+            default_stat = 40;
             break;
         case ['주먹질'].includes(skill_name):
-            skill_stat += 50;
+            default_stat = 50;
             break;
         case ['응급치료', '산탄총사격'].includes(skill_name):
-            skill_stat += 30;
+            default_stat = 30;
             break;
         case ['기계수리', '운전', '역사', '권총사격'].includes(skill_name):
-            skill_stat += 20;
+            default_stat = 20;
             break;
         case ['신용', '기관총사격', '기관단총', '매혹', '은닉', '설득'].includes(skill_name):
-            skill_stat += 15;
+            default_stat = 15;
             break;
         case ['예술', '승마', '의학', '신비학', '흥정', '제작', '심리학'].includes(skill_name):
-            skill_stat += 5;
+            default_stat = 5;
             break;
         case ['회계', '위치파악', '박치기', '숨기', '추적', '전기수리', '자연사', '사진술', '수학'].includes(skill_name):
-            skill_stat += 10;
+            default_stat = 10;
             break;
         case ['도약', '듣기', '던지기', '잠행', '소총사격', '발차기', '자료조사', '수영', '붙잡기', '관찰력'].includes(skill_name):
-            skill_stat += 25;
+            default_stat = 25;
             break;
         case ['생물학', '컴퓨터', '전자공학', '지질학', '외국어', '물리학', '인류학', '천문학', '화학', '자물쇠다루기', '조종', '정신분석', '고고학', '변장', '무술'].includes(skill_name):
-            skill_stat += 1;
+            default_stat = 1;
             break;
     }
-    const skill_data = await make_uses_skill_data(user_id, skill_name, skill_stat, temp_stat);
+    const skill_data = await make_uses_skill_data(user_id, skill_name, skill_stat, default_stat, temp_stat);
 
     await update_use_skill_point(user_id, temp_stat); // 잔여기능포인트 업데이트
     await upsert_uses_skill(user_id, skill_data.skill_name, skill_data.skill_stat, skill_data.use_point);
-    await message.channel.send(skill_name + '( ' + skill_stat + '% ) 기능이 추가 되었습니다.');
+    await message.channel.send(skill_name + '( ' + skill_data.skill_stat + '% ) 기능이 추가 되었습니다.');
 
     return;
 };
 
-const make_uses_skill_data = async (user_id: string, skill_name: string, skill_stat: number, temp_point: number) => {
+const make_uses_skill_data = async (user_id: string, skill_name: string, skill_stat: number, default_stat: number, temp_point: number) => {
     let use_point = 0;
     let temp_skill_stat = '';
     const check_skill = await get_uses_skill_list(user_id);
@@ -250,20 +217,37 @@ const make_uses_skill_data = async (user_id: string, skill_name: string, skill_s
         const use_stack_point = (await skill_uses_list).flatMap((element) => { // 지금까지 사용한 포인트
             return element.use_point;
         });
-        const use_stack_skill_name = (await skill_uses_list).flatMap((element) => { // 지금까지 사용한 포인트
+        const use_stack_skill_name = (await skill_uses_list).flatMap((element) => { // 지금까지 넣은 스킬
             return element.skill_name;
         });
-        const use_stack_skill_stat = (await skill_uses_list).flatMap((element) => { // 지금까지 사용한 포인트
+        const use_stack_skill_stat = (await skill_uses_list).flatMap((element) => { // 지금까지 넣은 스킬의 각각의 포인트
             return element.skill_stat;
         });
 
-        temp_skill_stat = use_stack_skill_stat + ',' + String(skill_stat);
+        let use_stack_skill_name_arr = use_stack_skill_name[0]?.split(',');
+        let use_stack_skill_stat_arr = use_stack_skill_stat[0]?.split(',');
+
+        const check_num = use_stack_skill_name_arr?.indexOf(skill_name);
         use_point = temp_point + use_stack_point[0];
-        skill_name = use_stack_skill_name + ',' + skill_name;
+
+        if(check_num === undefined){
+            temp_skill_stat = use_stack_skill_stat + ',' + String(skill_stat + default_stat);
+            skill_name = use_stack_skill_name + ',' + skill_name;
+        }else{
+            let temp_skill_stat_num = Number(use_stack_skill_stat_arr![check_num]);
+            console.log('temp skill stat num : ' + temp_skill_stat_num);
+            use_stack_skill_stat_arr![check_num] = String(skill_stat + temp_skill_stat_num);
+            console.log('skill stat : ' + skill_stat);
+            const use_sktack_skill_stat_string = use_stack_skill_stat_arr!.join(',');
+
+            skill_name = use_stack_skill_name_arr!.join(',');
+            temp_skill_stat = use_sktack_skill_stat_string;
+        }
     }else{
         use_point = temp_point;
-        temp_skill_stat = String(skill_stat);
+        temp_skill_stat = String(skill_stat + default_stat);
     }
+
     const result = {
         skill_stat: temp_skill_stat,
         skill_name: skill_name,
