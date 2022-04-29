@@ -8,18 +8,107 @@ import { Message, MessageEmbed, } from "discord.js";
 
 const NULL_VALUE = '-';
 
-export const view_user_sheet = async (message: Message<boolean>, user_id: string) => {
-    if(!(message.content === '!탐사자 시트')) return;
+let equip: string;
+let backstory: string;
+let view_ability: number[];
+let battle_status: string[];
+let number_of_stat: number[];
+let avoid: number;
+let view_user:  {
+    name: string;
+    age: string;
+    sex: string;
+    job: string;
+    url: string;
+};
+let view_skill: {
+    uses_skill_name: string[];
+    uses_skill_stat: string[];
+};
 
-    
-    const equip = await view_equip(user_id) ?? NULL_VALUE;
-    const backstory = await view_backstory(user_id) ?? NULL_VALUE;
-    const view_user = await view_user_status(user_id);
-    const view_ability = await get_ability_status(user_id);
-    const view_skill = await view_uses_skill_list(user_id);
-    const battle_status = await view_battle_status(user_id);
-    const number_of_stat = await exchange_stat(view_skill.uses_skill_stat);
-    const avoid = view_ability[3] ?? 0;
+const make_tamplate_custom_data = async (view_flag: boolean, custom_data: any, user_id: string) => { //개선이 필요함 ㅡㅡ;
+    let result = {};
+
+    if(view_flag){
+        let equip = await view_equip(user_id) ?? NULL_VALUE;
+        let backstory = await view_backstory(user_id) ?? NULL_VALUE;
+        let view_user = await view_user_status(user_id);
+        let view_ability = await get_ability_status(user_id);
+        let view_skill = await view_uses_skill_list(user_id);
+        let battle_status = await view_battle_status(user_id);
+        let number_of_stat = await exchange_stat(view_skill.uses_skill_stat);
+        let avoid = view_ability[3] ?? 0;
+        
+        return result = {
+            equip: equip,
+            backstory: backstory,
+            view_user: view_user,
+            view_ability: view_ability,
+            view_skill: view_skill,
+            battle_status: battle_status,
+            number_of_stat: number_of_stat,
+            avoid: avoid,
+        }   
+    }else{
+        let equip: string = custom_data.equip;
+        let backstory: string = custom_data.back_story;
+        let view_user = { 
+            name: custom_data.name,
+            age: custom_data.age,
+            sex: custom_data.sex,
+            job: custom_data.job,
+            url: custom_data.image_link, 
+        };
+        let view_ability = [
+            custom_data.str, 
+            custom_data.hel, 
+            custom_data.big, 
+            custom_data.dex, 
+            custom_data.look, 
+            custom_data.idea, 
+            custom_data.pow, 
+            custom_data.edu, 
+            custom_data.luk, 
+            custom_data.mov, 
+            custom_data.hp, 
+            custom_data.mp, 
+            custom_data.san
+        ];
+        let view_skill = {
+            uses_skill_name: custom_data.skill_name.split(','),
+            uses_skill_stat: custom_data.skill_stat.split(','),
+        };
+        let battle_status = [custom_data.long_mad, custom_data.dead];
+        let number_of_stat = await exchange_stat(view_skill.uses_skill_stat);
+        let avoid = view_ability[3] ?? 0;
+        
+        return result = {
+            equip: equip,
+            backstory: backstory,
+            view_user: view_user,
+            view_ability: view_ability,
+            view_skill: view_skill,
+            battle_status: battle_status,
+            number_of_stat: number_of_stat,
+            avoid: avoid,
+        }   
+    }
+};
+
+
+export const view_user_sheet = async (message: Message<boolean>, user_id: string, view_flag: boolean, custom_data: any) => {
+    const tamplate_all_data = await make_tamplate_custom_data(view_flag, custom_data, user_id);
+    let equip = tamplate_all_data.equip;
+    let backstory = tamplate_all_data.backstory;
+    let view_user = tamplate_all_data.view_user;
+    let view_ability = tamplate_all_data.view_ability;
+    let view_skill = tamplate_all_data.view_skill;
+    let battle_status = tamplate_all_data.battle_status;
+    let number_of_stat = tamplate_all_data.number_of_stat;
+    let avoid = tamplate_all_data.avoid;
+    let player = view_flag ? '<@' + user_id + '>' : '템플릿입니다.';
+
+    console.log('data : ' + equip, backstory, view_ability, view_user, battle_status, number_of_stat, avoid);
 
     let USER_VALUE = [];
     let SKILL_VALUES = [];
@@ -39,14 +128,14 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
         }
     }
     
-    
+    //'<@' + user_id + '>'
     const embed = new MessageEmbed()
         .setColor('#C171F5')
         .setTitle('👤 탐사자 시트')
         .setThumbnail(view_user.url ?? 'https://png.clipart.me/istock/previews/9349/93493545-people-icon.jpg')
         .addFields(
             { name: '이름', value: view_user.name ?? NULL_VALUE},
-            { name: '플레이어', value: '<@' + user_id + '>' },
+            { name: '플레이어', value: player },
             { name: '직업', value: view_user.job ?? NULL_VALUE, inline: true},
             { name: '나이', value: String(view_user.age ?? NULL_VALUE) , inline: true }, 
             { name: '성별', value: view_user.sex ?? NULL_VALUE, inline: true},
@@ -134,9 +223,9 @@ export const view_all_user_sheet = async(message: Message<boolean>) => {
 
 export const exchange_stat = async(stat: String[]) => {
     let number_stat: number[] = [];
-
+    
     for(let i = 0; i< 8; i++){
-        number_stat[i] = Number(stat[i]) == NaN ? 0 : Number(stat[i]);
+        number_stat[i] = stat[i] === undefined ? 0 : Number(stat[i]);
     }
 
     return number_stat;

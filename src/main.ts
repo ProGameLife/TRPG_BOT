@@ -37,7 +37,12 @@ import {
     san_dice, 
     set_dice,
 } from "./dice";
-import { user_backup } from "./user_backup";
+import { 
+    apply_tamplate,
+    user_backup, 
+    view_tamplate, 
+    view_user_backup 
+} from "./user_backup";
 import { create_room } from "./utill/utill";
 import { make_backstory } from "./backstory";
 import { view_all_user_sheet, view_user_sheet } from "./view/view";
@@ -103,16 +108,22 @@ client.on('message',async (message) => {
             await san_dice(message, user_id);
         }
         
+        if(message.content.startsWith('!탐사자 시트')){
+            await view_user_sheet(message, user_id, true, '');
+        }
+
         if(message.content.startsWith('!탐사자')){
-            await view_user_sheet(message, user_id);
             await view_all_user_sheet(message);
         }
 
         if(message.content.startsWith('!템플릿')){
             await user_backup(message);
+            await view_user_backup(message);
+            await view_tamplate(message);
+            await apply_tamplate(message, user_id);
         }
 
-        if(add_job.start || message.content.startsWith('!직업')){
+        if(message.content.startsWith('!직업') || add_job.start){
             await end_job_command(message);
             await set_p_sex(message, user_id);
             await set_p_age(message, user_id);

@@ -2,6 +2,49 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+export const get_tamplate_data = async (id: number) => {
+    const tamplate_id_data = await prisma.user_backup.findMany({ 
+        select: {
+            str: true,
+            hel: true,
+            big: true,
+            dex: true,
+            look: true,
+            idea: true,
+            pow: true,
+            edu: true,
+            luk: true,
+            mov: true,
+            hp: true,
+            mp: true,
+            san: true,
+            use_point: true,
+            skill_name: true,
+            skill_stat: true,
+            p_name: true,
+            p_sex: true,
+            p_job: true,
+            p_age: true,
+            image_link: true,
+            back_story: true,
+            equip: true,
+            physique: true,
+            bonus_attack: true,
+            long_mad: true,
+            dead: true,
+        },
+        where: { id: id, },
+    });
+
+    return tamplate_id_data;
+};
+
+export const get_all_user_backup = async () => {
+    const all_user_backup = await prisma.user_backup.findMany();
+
+    return all_user_backup;
+};
+
 export const get_ability = async (user_id: string) => {
     const get_ability = await prisma.ability.findMany({
         select: {
@@ -26,10 +69,10 @@ export const get_all_user_id = async () => {
 
     const user_id_list = get_all_user_id.flatMap((element) => {
         return element.user_id;
-    })
+    });
 
     return user_id_list;
-}
+};
 
 export const get_ability_idea = async (user_id: string) => {
     const get_ability_idea = await prisma.ability.findMany({
