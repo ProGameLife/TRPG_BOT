@@ -198,7 +198,7 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
 
     await update_use_skill_point(user_id, temp_stat); // 잔여기능포인트 업데이트
     await upsert_uses_skill(user_id, skill_data.skill_name, skill_data.skill_stat, skill_data.use_point);
-    await message.channel.send(skill_name + '( ' + skill_data.skill_stat + '% ) 기능이 추가 되었습니다.');
+    await message.channel.send(skill_name + '기능이 추가 되었습니다. !기능목록으로 확인 부탁드립니다.');
 
     return;
 };
@@ -206,11 +206,12 @@ export const add_user_skill_list = async (message: Message<boolean> , user_id: s
 const make_uses_skill_data = async (user_id: string, skill_name: string, skill_stat: number, default_stat: number, temp_point: number) => {
     let use_point = 0;
     let temp_skill_stat = '';
+
     const check_skill = await get_uses_skill_list(user_id);
     const ckeck_skill_name = check_skill.flatMap((element) => {
         return element.skill_name;
     });
-
+    console.log('check_skill_name : ' + ckeck_skill_name);
     if(!(ckeck_skill_name[0] ===  undefined || ckeck_skill_name[0] === '')){ // 이미 기능추가를 한적있는지
         const skill_uses_list = get_uses_skill_list(user_id);
 
@@ -225,23 +226,23 @@ const make_uses_skill_data = async (user_id: string, skill_name: string, skill_s
         });
 
         let use_stack_skill_name_arr = use_stack_skill_name[0]?.split(',');
-        let use_stack_skill_stat_arr = use_stack_skill_stat[0]?.split(',');
-
-        const check_num = use_stack_skill_name_arr?.indexOf(skill_name);
+        let use_stack_skill_stat_arr = use_stack_skill_stat[0]!.split(',');
+        
+        const check_num = use_stack_skill_name_arr!.indexOf(skill_name);
         use_point = temp_point + use_stack_point[0];
 
-        if(check_num === undefined){
+        if(check_num === undefined || check_num === -1){
             temp_skill_stat = use_stack_skill_stat + ',' + String(skill_stat + default_stat);
             skill_name = use_stack_skill_name + ',' + skill_name;
         }else{
-            let temp_skill_stat_num = Number(use_stack_skill_stat_arr![check_num]);
-            console.log('temp skill stat num : ' + temp_skill_stat_num);
+            let temp_skill_stat_num = Number(use_stack_skill_stat_arr[check_num]);
+
             use_stack_skill_stat_arr![check_num] = String(skill_stat + temp_skill_stat_num);
-            console.log('skill stat : ' + skill_stat);
             const use_sktack_skill_stat_string = use_stack_skill_stat_arr!.join(',');
 
             skill_name = use_stack_skill_name_arr!.join(',');
             temp_skill_stat = use_sktack_skill_stat_string;
+            console.log(use_sktack_skill_stat_string);
         }
     }else{
         use_point = temp_point;
