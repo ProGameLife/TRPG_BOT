@@ -45,7 +45,7 @@ import {
 } from "./user_backup";
 import { create_room } from "./utill/utill";
 import { make_backstory } from "./backstory";
-import { view_all_user_sheet, view_user_sheet } from "./view/view";
+import { add_player, view_all_user_sheet, view_user_sheet } from "./view/view";
 import { clear_equip, make_equip } from "./equip";
 import { edit_user_ability } from "./kpc/kpc_command";
 import { Client, Intents, TextChannel } from "discord.js";
@@ -112,8 +112,9 @@ client.on('message',async (message) => {
             await view_user_sheet(message, user_id, true, '');
         }
 
-        if(message.content.startsWith('!탐사자')){
+        if(message.content.startsWith('!플레이어')){
             await view_all_user_sheet(message);
+            await add_player(message);
         }
 
         if(message.content.startsWith('!템플릿')){

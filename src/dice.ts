@@ -19,7 +19,6 @@ export const set_dice = async (message: Message<boolean>) => {
     const dice_number = dice_command[0].substring(pos1, pos2);
     const extra_number = dice_command[0].substring(pos2 + 1, dice_command[0].length) === '' ? '0' : dice_command[0].substring(pos2 + 1, dice_command[0].length);
     
-    console.log(times, dice_number, extra_number);
     const result_dice = roll_dice(Number(times), Number(dice_number), Number(extra_number), result_dice_number, 0);
     await message.reply(dice_command[0] + ' 주사위 결과 : ' + result_dice.toString());
 
@@ -67,10 +66,10 @@ export const san_dice = async (message: Message<boolean>, user_id: string) => {
         san_roll_result = roll_dice(Number(times), Number(dice_number), Number(extra_number), 0, 0);
     }else{
         san_flag = true;
-        san_roll_result = Number(dice_command[0].substring(pos1 + 1, dice_command[0].length));
+
+        san_roll_result = Number(dice_command[0].substring(pos1, dice_command[0].length));
     }
 
-    console.log(san_roll_result);
 
     if(Number(user_san[0]) >= first_dice){
         san = user_san[0] - Number(success_san);
@@ -80,7 +79,7 @@ export const san_dice = async (message: Message<boolean>, user_id: string) => {
         const result = san_roll_result;
         san = user_san[0] - result;
         await update_san(user_id, san);
-        result_message = '주사위 판정 실패!\n' + dice_command[0] + ' 주사위 판정을 하여 결과 : ' + result;
+        result_message = '주사위 판정 실패!\n' + dice_command[0] + ' 판정을 하여 결과 : ' + result;
     }
 
     await message.channel.sendTyping();
