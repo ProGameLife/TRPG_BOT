@@ -54,6 +54,19 @@ export const upsert_uses_skill = async (user_id: string, skill_name: string, ski
     return;
 };
 
+export const upsert_team = async (voice_channle_id: string, user_id: string) => {
+    await prisma.team.upsert({
+        where: { voice_id: voice_channle_id },
+        create: {
+            user_id: user_id,
+            voice_id: voice_channle_id,
+        },
+        update: {
+            user_id: user_id,
+        },
+    });
+};
+
 export const upsert_tamplate = async (data: template_data, user_id: string) => {
     await prisma.ability.upsert({
         where: { user_id: user_id },
@@ -89,7 +102,7 @@ export const upsert_tamplate = async (data: template_data, user_id: string) => {
             san: data.san,
         },
     });
-    
+
     await prisma.skill_uses.upsert({
         where: { user_id: user_id },
         create: {

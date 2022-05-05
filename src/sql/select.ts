@@ -39,6 +39,23 @@ export const get_tamplate_data = async (id: number) => {
     return tamplate_id_data;
 };
 
+export const get_play_user_id = async (voice_id: string) => {
+    const play_user_id = await prisma.team.findMany({
+        select: {
+            user_id: true,
+        },
+        where: {
+            voice_id: voice_id,
+        },
+    });
+
+    const result = play_user_id.flatMap((element) => {
+        return element.user_id;
+    });
+    
+    return result[0];
+}
+
 export const get_all_user_backup = async () => {
     const all_user_backup = await prisma.user_backup.findMany();
 

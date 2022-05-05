@@ -148,3 +148,8 @@ model user_backup {
   skill_name   String? @db.VarChar(128)
   skill_stat   String? @db.VarChar(128)
 }
+
+model team {
+  voice_id String @id @default("") @db.VarChar(64)
+  user_id  String @default("") @db.VarChar(2048)
+}

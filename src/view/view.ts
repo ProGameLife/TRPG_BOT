@@ -3,8 +3,9 @@ import { view_user_status } from "../job";
 import { view_backstory } from "../backstory";
 import { get_ability_status } from "../ability";
 import { view_uses_skill_list } from "../skill";
-import { get_all_user_id, get_battle_status } from "../sql/select";
-import { Message, MessageEmbed, } from "discord.js";
+import { get_battle_status, get_play_user_id } from "../sql/select";
+import { Message, MessageEmbed, VoiceChannel } from "discord.js";
+import { upsert_team } from "../sql/upsert";
 
 const NULL_VALUE = '-';
 
@@ -185,15 +186,23 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
 };
 
 export const view_all_user_sheet = async(message: Message<boolean>) => {
-    if(!(message.content === '!탐사자 시트 요약')) return;
+    if(!(message.content === '!플레이어 요약')) return;
+    const voice_id = message.member!.voice.channelId ?? '';
+    const user_id_list = await get_play_user_id(voice_id);
 
-    const user_id_list = await get_all_user_id();
+    if(user_id_list === ''){
+        await message.channel.send('현재 게임에 대한 플레이어 정보가 없습니다. ``!플레이어 추가`` 를 진행해주세요.');
+        return;
+    }
 
-    for(let i = 0; i < user_id_list.length; i++){
-        const view_user = await view_user_status(user_id_list[i]);
-        const view_ability = await get_ability_status(user_id_list[i]);
-        const battle_status = await view_battle_status(user_id_list[i]);
-        const equip = await view_equip(user_id_list[i]) ?? NULL_VALUE;
+    const user_id_arr = user_id_list.split(',');
+    console.log(user_id_arr);
+
+    for(let i = 0; i < user_id_arr.length; i++){
+        const view_user = await view_user_status(user_id_arr[i]);
+        const view_ability = await get_ability_status(user_id_arr[i]);
+        const battle_status = await view_battle_status(user_id_arr[i]);
+        const equip = await view_equip(user_id_arr[i]) ?? NULL_VALUE;
 
         const embed = new MessageEmbed()
             .setColor('#C171F5')
@@ -201,7 +210,7 @@ export const view_all_user_sheet = async(message: Message<boolean>) => {
             .setThumbnail(view_user.url ?? 'https://png.clipart.me/istock/previews/9349/93493545-people-icon.jpg')
             .addFields(
                 { name: '이름', value: view_user.name ?? NULL_VALUE},
-                { name: '플레이어', value: '<@' + user_id_list[i] + '>' },
+                { name: '플레이어', value: '<@' + user_id_arr[i] + '>' },
                 { name: '직업', value: view_user.job ?? NULL_VALUE, inline: true},
                 { name: '나이', value: view_user.age ?? NULL_VALUE , inline: true }, 
                 { name: '성별', value: view_user.sex ?? NULL_VALUE, inline: true},
@@ -220,6 +229,31 @@ export const view_all_user_sheet = async(message: Message<boolean>) => {
 
     return;
 };
+
+export const add_player = async (message: Message<boolean>) => {
+    if(!message.content.startsWith('!플레이어 추가')) return;
+
+    const voice_channel_id = message.member!.voice.channelId ?? '';
+    const user_id_temp = message.member!.id;
+    let user_id = '';
+    const user_id_list = await get_play_user_id(voice_channel_id) ?? '';
+
+    if(user_id_list.includes(user_id_temp)){
+        await message.channel.send('이미 있는 유저 입니다. 추가가 취소됩니다.');
+        return;
+    }
+
+    if(user_id_list === ''){
+        user_id = user_id_temp;
+    }else{
+        user_id = user_id_list + ',' + user_id_temp;
+    }
+
+    await upsert_team(voice_channel_id, user_id);
+    await message.channel.send('해당 채널에 대한 플레이어 정보가 추가 되었습니다.');
+    
+    return;
+}
 
 export const exchange_stat = async(stat: String[]) => {
     let number_stat: number[] = [];
