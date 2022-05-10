@@ -101,7 +101,7 @@ export const clear_manual_ability = async (message: Message<boolean>, user_id: s
 };
 
 export const set_auto_ability = async (message: Message<boolean>, user_id: string) => {
-    if(!(message.content === '!특성치 결정')) return;
+    if(!(message.content === '!특성치 자동')) return;
 
     await upsert_ability(user_id, 0, 0, 0, 0);
     const extra_ability = await get_ability(user_id);
