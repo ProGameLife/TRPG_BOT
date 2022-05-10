@@ -55,34 +55,47 @@ const client = new Client({
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_TYPING,
-        Intents.FLAGS.GUILD_SCHEDULED_EVENTS,
-        Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
     ],
 });
-const test = ['!근력', '!건강', '!크기', '!민첩성', '!민첩', '!외모', '!지능', '!정신력', '!교육', '!운'];
 
 client.on('ready', async () => {
-    console.log('TRPG WORLD ON');
-    send_main_guide(client);
+    try{
+        console.log('TRPG BOT ON');
+        await send_main_guide(client);
+    }catch(e){
+        console.log(e);
+    }
 });
 
 client.on('message',async (message) => {
     if(message.channel.type == 'DM' || message.author.bot) return;
-    const user_id = message.member?.user.id ?? Math.floor(Math.random() * 999999999999999).toString();
+
+    const user_id = message.member!.user.id;
+
+    if(user_id === undefined || user_id === '') {
+        await message.channel.send('사용자 정보를 불러오지 못했습니다. 관리자에게 문의 부탁드립니다.');
+        return;
+    }
+
     try{
         if(message.content === '!정리'){
             message.delete();
             await message.channel.bulkDelete(100);
+
+            return;
         }
 
         if(message.content.startsWith('!KPC')){
             await kpc_guide(message);  
             await edit_user_ability(message); // !KPC 950231695163031603 근력 40  이렇게 입력 받으면 해당 유저의 탐사자 정보의 근력 값이 40으로 수정 된다
-            
+                        
+            return;
         }
         
         if(message.content.startsWith('!가이드')){
             await send_setup_guide(message);
+                        
+            return;
         }
         
         if((message.content.startsWith('!특성치')) || ability_stat.start){
@@ -93,6 +106,8 @@ client.on('message',async (message) => {
             await clear_manual_ability(message, user_id);
             await check_manual_ability(message, user_id);
             await send_manual_ability_guide(message, user_id);
+                        
+            return;
         }
 
         if((message.content.includes('기능'))){
@@ -101,21 +116,29 @@ client.on('message',async (message) => {
             await add_user_skill_list(message, user_id);
             await get_user_all_skill_list(message, user_id);
             await end_user_skill(message);
+                        
+            return;
         }
 
         if(message.content.includes('dice')){
             await set_dice(message);
             await san_dice(message, user_id);
+                        
+            return;
         }
         
         if(message.content.startsWith('!탐사자 시트')){
             await view_user_sheet(message, user_id, true, '');
+                        
+            return;
         }
 
         if(message.content.startsWith('!플레이어')){
             await view_all_user_sheet(message);
             await add_player(message);
             await list_player(message);
+                        
+            return;
         }
 
         if(message.content.startsWith('!템플릿')){
@@ -123,6 +146,8 @@ client.on('message',async (message) => {
             await view_user_backup(message);
             await view_tamplate(message);
             await apply_tamplate(message, user_id);
+                        
+            return;
         }
 
         if(message.content.startsWith('!직업') || add_job.start){
@@ -133,17 +158,23 @@ client.on('message',async (message) => {
             await set_p_job(message, user_id);
             await set_p_name(message, user_id);
             await send_job_guide(message, user_id);
+                        
+            return;
         }
 
         if(message.content.startsWith('!장비')){
             await send_equip_guide(message);
             await make_equip(message, user_id);
             await clear_equip(message, user_id);
+                        
+            return;
         }
 
         if(message.content.startsWith('!백스토리')){
             await send_backstroy_guide(message);
             await make_backstory(message, user_id);
+                        
+            return;
         }
     }catch(e){
         console.log(e);
@@ -154,6 +185,8 @@ client.on("interactionCreate", async (interaction) => {
     if (interaction.isButton()) { //버튼 눌렀을 때 이벤트
         const channel = await client.channels.fetch(interaction.channelId) as TextChannel;
         await create_room(interaction, channel, client);
+
+        return;
     }
 });
 

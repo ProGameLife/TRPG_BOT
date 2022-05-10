@@ -569,6 +569,7 @@ export const make_user_skill_list = async (user_id: string) => {
         charm[0], 
         persuade[0], 
         math[0]
-    ]
+    ];
+    
     return result_skill.toString().split(',');
 };

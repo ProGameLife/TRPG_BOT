@@ -18,6 +18,8 @@ export const make_equip = async (message: Message<boolean>, user_id: string) => 
     
     await update_user_equip(user_id, equip);
     await message.channel.send('장비 입력이 되었습니다. ``!탐사자 시트``으로 내용 확인을 할 수 있습니다. ');
+
+    return;
 };
 
 export const clear_equip = async (message: Message<boolean>, user_id: string) => {
@@ -25,6 +27,8 @@ export const clear_equip = async (message: Message<boolean>, user_id: string) =>
 
     await update_clear_user_equip(user_id);
     await message.channel.send('장비 입력이 초기화 되었습니다. ``!탐사자 시트``으로 내용 확인을 할 수 있습니다. ');
+
+    return;
 };
 
 export const view_equip = async (user_id: string) => {

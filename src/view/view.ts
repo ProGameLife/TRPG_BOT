@@ -9,24 +9,6 @@ import { upsert_team } from "../sql/upsert";
 
 const NULL_VALUE = '-';
 
-let equip: string;
-let backstory: string;
-let view_ability: number[];
-let battle_status: string[];
-let number_of_stat: number[];
-let avoid: number;
-let view_user:  {
-    name: string;
-    age: string;
-    sex: string;
-    job: string;
-    url: string;
-};
-let view_skill: {
-    uses_skill_name: string[];
-    uses_skill_stat: string[];
-};
-
 const make_tamplate_custom_data = async (view_flag: boolean, custom_data: any, user_id: string) => { //개선이 필요함 ㅡㅡ;
     let result = {};
 
@@ -129,7 +111,6 @@ export const view_user_sheet = async (message: Message<boolean>, user_id: string
         }
     }
     
-    //'<@' + user_id + '>'
     const embed = new MessageEmbed()
         .setColor('#C171F5')
         .setTitle('👤 탐사자 시트')

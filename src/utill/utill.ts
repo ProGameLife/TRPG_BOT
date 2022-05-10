@@ -25,6 +25,14 @@ export const create_room = async (interaction: ButtonInteraction<CacheType>, cha
         }],
         parent: create_category.id,
     });
+    const create_sinario_channel = await channel.guild.channels.create('시나리오', {
+        type: 'GUILD_TEXT',
+        permissionOverwrites: [{
+            id: channel.guild.id,
+            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
+        }],
+        parent: create_category.id,
+    });
 
     await channel.guild.channels.create(voice_channel_name, {
         type: 'GUILD_VOICE',

@@ -6,6 +6,7 @@ import {
     MessageActionRow, 
 } from "discord.js";
 import { 
+    KPC_GUIDE,
     JOB_GUIDE,
     MAIN_GUIDE, 
     EQUIP_GUIDE,
@@ -14,7 +15,6 @@ import {
     MAKE_ABILITY_GUIDE, 
     MAKE_SKILL_SET_GUIDE,
     MAKE_ABILITY_MANUAL_GUIDE,
-    KPC_GUIDE,
 } from "./message/message_format";
 import { 
     create_first_skill, 
@@ -31,9 +31,10 @@ import { add_job } from "./job";
 import { ability_stat } from "./ability";
 import { make_skill_point } from "./skill";
 
-export const send_main_guide =async (client: Client<boolean>) => {
-    const channel = await client.channels.fetch('956028972645376060') as TextChannel;
+export const send_main_guide = async (client: Client<boolean>) => {
+    const channel = await client.channels.fetch('973475711471984640') as TextChannel;
 
+    channel.bulkDelete(3);
     const row = new MessageActionRow()
         .addComponents(
             new MessageButton()

@@ -70,7 +70,6 @@ export const san_dice = async (message: Message<boolean>, user_id: string) => {
         san_roll_result = Number(dice_command[0].substring(pos1, dice_command[0].length));
     }
 
-
     if(Number(user_san[0]) >= first_dice){
         san = user_san[0] - Number(success_san);
         await update_san(user_id, san);
@@ -86,4 +85,6 @@ export const san_dice = async (message: Message<boolean>, user_id: string) => {
     await message.channel.send('주사위 결과 : 1d100 = ' + first_dice + result_message);
     await message.channel.sendTyping();
     await message.channel.send('\n 이성이 ' + user_san[0] + ' => ' + san + ' 로 변경 되었습니다.');
+
+    return;
 };
