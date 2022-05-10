@@ -150,6 +150,6 @@ model user_backup {
 }
 
 model team {
-  voice_id String @id @default("") @db.VarChar(64)
+  voice_id String @id @db.VarChar(64)
   user_id  String @default("") @db.VarChar(2048)
 }

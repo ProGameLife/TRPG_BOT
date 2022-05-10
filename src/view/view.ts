@@ -4,7 +4,7 @@ import { view_backstory } from "../backstory";
 import { get_ability_status } from "../ability";
 import { view_uses_skill_list } from "../skill";
 import { get_battle_status, get_play_user_id } from "../sql/select";
-import { Message, MessageEmbed, VoiceChannel } from "discord.js";
+import { Channel, Message, MessageEmbed, VoiceChannel } from "discord.js";
 import { upsert_team } from "../sql/upsert";
 
 const NULL_VALUE = '-';
@@ -241,6 +241,12 @@ export const add_player = async (message: Message<boolean>) => {
     if(!message.content.startsWith('!플레이어 추가')) return;
 
     const voice_channel_id = message.member!.voice.channelId ?? '';
+    
+    if(voice_channel_id === '' || voice_channel_id === undefined){
+        await message.channel.send('현재 음성채널에 참여하지 않은 상태입니다. 플레이할 음성채널에 접속해주시기 바랍니다.');
+        return;
+    }
+    
     const user_id_temp = message.member!.id;
     let user_id = '';
     const user_id_list = await get_play_user_id(voice_channel_id) ?? '';
@@ -260,7 +266,7 @@ export const add_player = async (message: Message<boolean>) => {
     await message.channel.send('해당 채널에 대한 플레이어 정보가 추가 되었습니다.');
     
     return;
-}
+};
 
 export const exchange_stat = async(stat: String[]) => {
     let number_stat: number[] = [];
@@ -270,6 +276,27 @@ export const exchange_stat = async(stat: String[]) => {
     }
 
     return number_stat;
+};
+
+export const list_player = async (message: Message<boolean>) => {
+    if(!(message.content.startsWith('!플레이어 목록'))) return;
+
+    const voice_channel_id = message.member!.voice.channelId ?? '';
+    const user_id_temp = await get_play_user_id(voice_channel_id);
+
+    if(user_id_temp === '' || user_id_temp === undefined){
+        await message.channel.send('현재 음성채널에 대한 플레이어가 추가 되지 않았습니다.');
+        return;
+    }
+    const user_id = user_id_temp.split(',');
+    
+    let result_message = '';
+
+    for(let i = 0; i < user_id.length; i++){
+        result_message += i+1 + ' : <@' + user_id[i] + '> \n';
+    }
+
+    await message.channel.send('<#'+ voice_channel_id + '> 의 플레이어 목록입니다.\n' + result_message);
 };
 
 export const view_battle_status = async (user_id: string) => {

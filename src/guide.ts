@@ -67,7 +67,7 @@ export const send_setup_guide = async (message: Message<boolean>) => {
 };
 
 export const send_manual_ability_guide = async (message: Message<boolean>, user_id: string) => {
-    if(!(message.content === '!특성치 입력')) return;
+    if(!(message.content === '!특성치 수동')) return;
 
     ability_stat.start = true;
     await create_first_ability(user_id);
@@ -88,7 +88,7 @@ export const send_skill_guide = async (message: Message<boolean>, user_id: strin
 };
 
 export const send_job_guide = async (message: Message<boolean>, user_id: string) => {
-    if(!(message.content === '!직업')) return;
+    if(!(message.content === '!정보')) return;
 
     if(await get_count_user_status(user_id) === 0){
         await create_first_user_status(user_id);
@@ -119,4 +119,6 @@ export const kpc_guide = async (message: Message<boolean>) => {
     if(!(message.content === '!KPC')) return;
     
     await message.channel.send(KPC_GUIDE);
+
+    return;
 }
