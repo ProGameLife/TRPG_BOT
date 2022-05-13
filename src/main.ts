@@ -1,14 +1,15 @@
 import "dotenv/config";
 import {
+    kpc_guide,
     send_job_guide,
     send_main_guide, 
     send_equip_guide,
     send_setup_guide, 
     send_skill_guide,
+    all_command_guide,
     send_ability_guide, 
     send_backstroy_guide,
     send_manual_ability_guide,
-    kpc_guide,
 } from "./guide";
 import { 
     ability_stat,
@@ -43,9 +44,14 @@ import {
     view_tamplate, 
     view_user_backup 
 } from "./user_backup";
+import { 
+    add_player, 
+    list_player, 
+    view_user_sheet, 
+    view_all_user_sheet, 
+} from "./view/view";
 import { create_room } from "./utill/utill";
 import { make_backstory } from "./backstory";
-import { add_player, list_player, view_all_user_sheet, view_user_sheet } from "./view/view";
 import { clear_equip, make_equip } from "./equip";
 import { edit_user_ability } from "./kpc/kpc_command";
 import { Client, Intents, TextChannel } from "discord.js";
@@ -62,6 +68,7 @@ client.on('ready', async () => {
     try{
         console.log('TRPG BOT ON');
         await send_main_guide(client);
+        await all_command_guide(client);
     }catch(e){
         console.log(e);
     }

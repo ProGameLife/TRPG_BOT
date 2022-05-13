@@ -15,6 +15,8 @@ import {
     MAKE_ABILITY_GUIDE, 
     MAKE_SKILL_SET_GUIDE,
     MAKE_ABILITY_MANUAL_GUIDE,
+    COMMAND_GUIDE,
+    COMMAND_GUIDE2,
 } from "./message/message_format";
 import { 
     create_first_skill, 
@@ -48,6 +50,16 @@ export const send_main_guide = async (client: Client<boolean>) => {
     // +  '\n\n' + '대기중인 방 수 : ``' + ready_room + '``\n진행중인 방 수 : ``' + play_room + '``'
     await channel.send({ components: [row] });
 
+    return;
+};
+
+export const all_command_guide = async (client: Client<boolean>) => {
+    const channel = await client.channels.fetch('974455172803735603') as TextChannel;
+
+    await channel.bulkDelete(5);
+
+    await channel.send(COMMAND_GUIDE);
+    await channel.send(COMMAND_GUIDE2);
     return;
 };
 
